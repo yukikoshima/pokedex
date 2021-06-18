@@ -14,5 +14,8 @@ module.exports = {
   ],
   plugins: [],
   // add your custom rules here
-  rules: {},
+  rules: {
+    'no-unused-vars': 'off', // 未使用の変数
+    'prefer-const': 'off', // 強制const変数
+  },
 }
