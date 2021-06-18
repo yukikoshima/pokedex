@@ -2,7 +2,7 @@
   <v-container>
     <ul>
       <li v-for="(value, key) in pokemons" :key="key">
-        {{ value.name }}
+        {{ value.name }} : {{ value.text }}
       </li>
     </ul>
     <!-- <v-card-actions>
@@ -17,8 +17,8 @@
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 
-let api1 = 'https://pokeapi.co/api/v2/pokemon-species/'
-// let api2 = 'https://pokeapi.co/api/v2/pokemon/'
+let speciesApi = 'https://pokeapi.co/api/v2/pokemon-species/'
+let pokemonApi = 'https://pokeapi.co/api/v2/pokemon/'
 
 export default {
   components: {
@@ -33,69 +33,69 @@ export default {
   },
   methods: {
     infiniteHandler($state) {
-      const getSpecies = () => {
-        return new Promise((resolve) => {
-          fetch(api1).then((res) => {
-            return resolve(res.json())
-          })
-        })
+      const getSpecies = async () => {
+        return await fetch(speciesApi).then((res) => res.json())
       }
-      // const getPokemon = () => {
-      //   return new Promise((resolve) => {
-      //     fetch(api2).then((res) => {
-      //       return resolve(res.json())
-      //     })
-      //   })
-      // }
+      const getPokemon = async () => {
+        return await fetch(pokemonApi).then((res) => res.json())
+      }
 
-      getSpecies()
-        .then(async (species) => {
-          api1 = species.next
-          this.urls = species.results.map((ele) => ele.url)
-
-          for (const url of this.urls) {
-            const usePokemon = await fetch(url)
-              .then((result) => {
-                return result.json()
-              })
-              .catch((err) => {
-                console.log(err)
-              })
-
-            const name = usePokemon.names.find((ele) => {
-              if (ele.language.name === 'ja-Hrkt') {
-                return ele
-              }
-              return null
-            })
-            const genera = usePokemon.genera.find((ele) => {
-              if (ele.language.name === 'ja-Hrkt') {
-                return ele
-              }
-              return null
-            })
-            const text = usePokemon.flavor_text_entries.find((ele) => {
-              if (ele.language.name === 'ja-Hrkt') {
-                return ele
-              }
-              return null
-            })
-
-            const pokemon = {
-              name: name.name,
-              genus: genera.genus,
-              text: text.flavor_text,
-            }
-            this.pokemons.push(pokemon)
-          }
-          this.urls = []
-          $state.loaded()
+      Promise.all([getSpecies(), getPokemon()]).then((res) => {
+        Promise.all([papapa(res[0])]).then((res) => {
+          console.log('成功')
         })
-        .catch((err) => {
-          console.log('読み込み完了')
+      })
+      const that = this
+      async function papapa(species) {
+        speciesApi = species.next
+        that.urls = species.results.map((ele) => ele.url)
+
+        if (!speciesApi) {
           $state.complete()
-          console.error(err)
-        })
+        }
+
+        for (const url of that.urls) {
+          const usePokemon = await fetch(url)
+            .then((result) => {
+              return result.json()
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+
+          const name = usePokemon.names.find((ele) => {
+            if (ele.language.name === 'ja-Hrkt') {
+              return ele
+            }
+            return null
+          })
+          const genera = usePokemon.genera.find((ele) => {
+            if (ele.language.name === 'ja-Hrkt') {
+              return ele
+            }
+            return null
+          })
+          const text = usePokemon.flavor_text_entries.find((ele) => {
+            if (ele.language.name === 'ja-Hrkt') {
+              return ele
+            }
+            return null
+          })
+
+          const pokemon = {
+            name: name ? name.name : null,
+            genus: genera ? genera.genus : null,
+            text: text ? text.flavor_text : null,
+          }
+          that.pokemons.push(pokemon)
+        }
+        that.urls = []
+        $state.loaded()
+      }
+      // function wewewe(pokemon) {
+      //   console.log('yuki')
+      //   // console.log(pokemon)
+      // }
     },
   },
 }
