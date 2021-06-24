@@ -17,5 +17,8 @@ module.exports = {
   rules: {
     'no-unused-vars': 'off', // 未使用の変数
     'prefer-const': 'off', // 強制const変数
+    'no-ternary': 'off', // 三項演算子
+    'no-nested-ternary': 'off', // 三項演算子
+    'no-unneeded-ternary': 'off', // 三項演算子
   },
 }

@@ -1,25 +1,34 @@
 <template>
   <v-container>
-    <ul>
+    <h1>Hello</h1>
+    <!-- <ul>
       <li v-for="(value, key) in pokemons" :key="key">
-        {{ value.name }} : {{ value.text }}
+        {{ value.id }} : {{ value.name }} : {{ value.genus }} :
+        {{ `タイプ : ${value.types}` }} <br />
+        {{ value.text }}
+        <img v-if="value.image" :src="value.image" />
       </li>
-    </ul>
+    </ul> -->
     <!-- <v-card-actions>
       <v-btn color="success" @click="infiniteHandler">クリック</v-btn>
     </v-card-actions> -->
-    <infinite-loading @infinite="infiniteHandler">
+    <div infinite-wrapper>
+      <!-- set force-use-infinite-wrapper -->
+      <infinite-loading @infinite="infiniteHandler">
+        <span slot="no-more">もうないよ〜</span>
+      </infinite-loading>
+    </div>
+    <!-- <infinite-loading @infinite="infiniteHandler">
       <span slot="no-more">もうないよ〜</span>
-    </infinite-loading>
+    </infinite-loading> -->
   </v-container>
 </template>
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 
-let speciesApi = 'https://pokeapi.co/api/v2/pokemon-species/'
 let pokemonApi = 'https://pokeapi.co/api/v2/pokemon/'
-
+let speciesApi = 'https://pokeapi.co/api/v2/pokemon-species/'
 export default {
   components: {
     InfiniteLoading,
@@ -28,34 +37,68 @@ export default {
     return {
       pokemons: [],
       next: '',
-      urls: [],
+      speciesUrls: [],
+      pokemonUrls: [],
     }
   },
   methods: {
     infiniteHandler($state) {
-      const getSpecies = async () => {
-        return await fetch(speciesApi).then((res) => res.json())
-      }
-      const getPokemon = async () => {
-        return await fetch(pokemonApi).then((res) => res.json())
-      }
-
-      Promise.all([getSpecies(), getPokemon()]).then((res) => {
-        Promise.all([papapa(res[0])]).then((res) => {
-          console.log('成功')
-        })
-      })
       const that = this
-      async function papapa(species) {
-        speciesApi = species.next
-        that.urls = species.results.map((ele) => ele.url)
+      const getPokemonData = () => {
+        return fetch(pokemonApi).then((res) => res.json())
+      }
+      const getSpeciesData = () => {
+        return fetch(speciesApi).then((res) => res.json())
+      }
 
-        if (!speciesApi) {
+      const [pokemonData, speciesData] = Promise.all([
+        getPokemonData(),
+        getSpeciesData(),
+      ])
+        .then((res) => {
+          console.log('第一段階完了')
+          return res
+        })
+        .catch((err) => {
+          console.log('エラー')
+          console.log(err)
+        })
+
+      pokemonApi = pokemonData.next
+      speciesApi = speciesData.next
+      this.pokemonUrls = pokemonData.results.map((ele) => ele.url)
+      this.speciesUrls = speciesData.results.map((ele) => ele.url)
+
+      // const [getP, getS] = await Promise.all([
+      //   getPokemon(pokemonApi, this.pokemonUrls),
+      //   getSpecies(speciesApi, this.speciesUrls),
+      // ])
+      //   .then((res) => {
+      //     console.log('第二段階完了')
+      //     return res
+      //   })
+      //   .catch((err) => {
+      //     console.log('エラー')
+      //     console.log(err)
+      //   })
+
+      // for (const p of getP) {
+      //   for (const s of getS) {
+      //     if (p.id === s.id) {
+      //       that.pokemons.push({ ...p, ...s })
+      //       break
+      //     }
+      //   }
+      // }
+
+      async function getPokemon(api, urls) {
+        if (!api) {
           $state.complete()
         }
 
-        for (const url of that.urls) {
-          const usePokemon = await fetch(url)
+        const pokemons = []
+        for (const url of urls) {
+          const usePokemons = await fetch(url)
             .then((result) => {
               return result.json()
             })
@@ -63,39 +106,72 @@ export default {
               console.log(err)
             })
 
-          const name = usePokemon.names.find((ele) => {
+          const id = usePokemons.id
+          const image =
+            usePokemons.sprites.other['official-artwork'].front_default
+          const types = usePokemons.types.map((ele) => {
+            return ele.type.name
+          })
+          // タイプが英語で返ってくるので日本語に変換
+          const typesJa = that.$convertType.getTypeNameJa(types)
+
+          const pokemon = {
+            id: id || '',
+            image: image || '',
+            types: typesJa || '',
+          }
+          pokemons.push(pokemon)
+        }
+        $state.loaded()
+        return pokemons
+      }
+
+      async function getSpecies(api, urls) {
+        if (!api) {
+          $state.complete()
+        }
+
+        const speciess = []
+        for (const url of urls) {
+          const useSpecies = await fetch(url)
+            .then((result) => {
+              return result.json()
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+
+          const id = useSpecies.id
+          const name = useSpecies.names.find((ele) => {
             if (ele.language.name === 'ja-Hrkt') {
               return ele
             }
             return null
           })
-          const genera = usePokemon.genera.find((ele) => {
+          const genera = useSpecies.genera.find((ele) => {
             if (ele.language.name === 'ja-Hrkt') {
               return ele
             }
             return null
           })
-          const text = usePokemon.flavor_text_entries.find((ele) => {
+          const text = useSpecies.flavor_text_entries.find((ele) => {
             if (ele.language.name === 'ja-Hrkt') {
               return ele
             }
             return null
           })
 
-          const pokemon = {
-            name: name ? name.name : null,
-            genus: genera ? genera.genus : null,
-            text: text ? text.flavor_text : null,
+          const species = {
+            id: id || '',
+            name: name ? name.name : '',
+            genus: genera ? genera.genus : '',
+            text: text ? text.flavor_text : '',
           }
-          that.pokemons.push(pokemon)
+          speciess.push(species)
         }
-        that.urls = []
         $state.loaded()
+        return speciess
       }
-      // function wewewe(pokemon) {
-      //   console.log('yuki')
-      //   // console.log(pokemon)
-      // }
     },
   },
 }
