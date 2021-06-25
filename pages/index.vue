@@ -1,40 +1,36 @@
 <template>
   <v-container>
     <h1>Hello</h1>
-    <!-- <ul>
+    <ul>
       <li v-for="(value, key) in pokemons" :key="key">
-        {{ value.id }} : {{ value.name }} : {{ value.genus }} :
-        {{ `タイプ : ${value.types}` }} <br />
+        <h1>{{ value.pokeId }}</h1>
+        {{ value.name }} : {{ value.genus }} {{ `タイプ : ${value.typesJa}` }}
+        <br />
         {{ value.text }}
         <img v-if="value.image" :src="value.image" />
       </li>
-    </ul> -->
+    </ul>
     <!-- <v-card-actions>
       <v-btn color="success" @click="infiniteHandler">クリック</v-btn>
     </v-card-actions> -->
-    <div infinite-wrapper>
-      <!-- set force-use-infinite-wrapper -->
-      <infinite-loading @infinite="infiniteHandler">
-        <span slot="no-more">もうないよ〜</span>
-      </infinite-loading>
-    </div>
-    <!-- <infinite-loading @infinite="infiniteHandler">
+    <infinite-loading @infinite="infiniteHandler">
       <span slot="no-more">もうないよ〜</span>
-    </infinite-loading> -->
+    </infinite-loading>
   </v-container>
 </template>
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
 
-let pokemonApi = 'https://pokeapi.co/api/v2/pokemon/'
-let speciesApi = 'https://pokeapi.co/api/v2/pokemon-species/'
+let pokeApi = 'https://pokeapi.co/api/v2/pokemon/'
+let pokeSpApi = 'https://pokeapi.co/api/v2/pokemon-species/'
 export default {
   components: {
     InfiniteLoading,
   },
   data() {
     return {
+      pokemonsNumber: 898,
       pokemons: [],
       next: '',
       speciesUrls: [],
@@ -42,21 +38,20 @@ export default {
     }
   },
   methods: {
-    infiniteHandler($state) {
+    async infiniteHandler($state) {
       const that = this
-      const getPokemonData = () => {
-        return fetch(pokemonApi).then((res) => res.json())
+      const fetchPokeData = async () => {
+        return await fetch(pokeApi).then((res) => res.json())
       }
-      const getSpeciesData = () => {
-        return fetch(speciesApi).then((res) => res.json())
+      const fetchPokeSpData = async () => {
+        return await fetch(pokeSpApi).then((res) => res.json())
       }
 
-      const [pokemonData, speciesData] = Promise.all([
-        getPokemonData(),
-        getSpeciesData(),
+      const [pokeData, pokeSpData] = await Promise.all([
+        fetchPokeData(),
+        fetchPokeSpData(),
       ])
         .then((res) => {
-          console.log('第一段階完了')
           return res
         })
         .catch((err) => {
@@ -64,113 +59,86 @@ export default {
           console.log(err)
         })
 
-      pokemonApi = pokemonData.next
-      speciesApi = speciesData.next
-      this.pokemonUrls = pokemonData.results.map((ele) => ele.url)
-      this.speciesUrls = speciesData.results.map((ele) => ele.url)
+      if (!pokeData && !pokeSpData) return
+      getPokeAndSp(pokeData, pokeSpData)
 
-      // const [getP, getS] = await Promise.all([
-      //   getPokemon(pokemonApi, this.pokemonUrls),
-      //   getSpecies(speciesApi, this.speciesUrls),
-      // ])
-      //   .then((res) => {
-      //     console.log('第二段階完了')
-      //     return res
-      //   })
-      //   .catch((err) => {
-      //     console.log('エラー')
-      //     console.log(err)
-      //   })
+      async function getPokeAndSp(pokeData, pokeSpData) {
+        pokeApi = pokeData.next
+        pokeSpApi = pokeSpData.next
 
-      // for (const p of getP) {
-      //   for (const s of getS) {
-      //     if (p.id === s.id) {
-      //       that.pokemons.push({ ...p, ...s })
-      //       break
-      //     }
-      //   }
-      // }
-
-      async function getPokemon(api, urls) {
-        if (!api) {
+        if (!pokeApi && !pokeSpApi) {
           $state.complete()
         }
+        const urls = [
+          pokeData.results.map((ele) => ele.url),
+          pokeSpData.results.map((ele) => ele.url),
+        ]
 
-        const pokemons = []
-        for (const url of urls) {
-          const usePokemons = await fetch(url)
-            .then((result) => {
-              return result.json()
-            })
-            .catch((err) => {
-              console.log(err)
-            })
+        let pokeId = ''
+        let image = ''
+        let typesJa = []
+        let spId = ''
+        let name = {}
+        let genera = {}
+        let text = {}
+        let pokeArray = []
+        let spArray = []
+        for (const url of urls[0]) {
+          const res = await fetch(url)
+          const poke = await res.json()
 
-          const id = usePokemons.id
-          const image =
-            usePokemons.sprites.other['official-artwork'].front_default
-          const types = usePokemons.types.map((ele) => {
+          pokeId = poke.id
+          image = poke.sprites.other['official-artwork'].front_default
+          const types = poke.types.map((ele) => {
             return ele.type.name
           })
           // タイプが英語で返ってくるので日本語に変換
-          const typesJa = that.$convertType.getTypeNameJa(types)
+          typesJa = that.$typeToJa(types)
 
-          const pokemon = {
-            id: id || '',
-            image: image || '',
-            types: typesJa || '',
-          }
-          pokemons.push(pokemon)
+          pokeArray.push({
+            pokeId: pokeId || '',
+            image,
+            typesJa,
+          })
         }
-        $state.loaded()
-        return pokemons
-      }
-
-      async function getSpecies(api, urls) {
-        if (!api) {
-          $state.complete()
-        }
-
-        const speciess = []
-        for (const url of urls) {
-          const useSpecies = await fetch(url)
-            .then((result) => {
-              return result.json()
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-
-          const id = useSpecies.id
-          const name = useSpecies.names.find((ele) => {
+        for (const url of urls[1]) {
+          const res = await fetch(url)
+          const sp = await res.json()
+          spId = sp.id
+          name = sp.names.find((ele) => {
             if (ele.language.name === 'ja-Hrkt') {
               return ele
             }
             return null
           })
-          const genera = useSpecies.genera.find((ele) => {
+          genera = sp.genera.find((ele) => {
             if (ele.language.name === 'ja-Hrkt') {
               return ele
             }
             return null
           })
-          const text = useSpecies.flavor_text_entries.find((ele) => {
+          text = sp.flavor_text_entries.find((ele) => {
             if (ele.language.name === 'ja-Hrkt') {
               return ele
             }
             return null
           })
-
-          const species = {
-            id: id || '',
+          spArray.push({
+            spId: spId || '',
             name: name ? name.name : '',
-            genus: genera ? genera.genus : '',
+            genera: genera ? genera.genus : '',
             text: text ? text.flavor_text : '',
+          })
+        }
+        for (const poke of pokeArray) {
+          for (const sp of spArray) {
+            if (poke.pokeId === sp.spId) {
+              that.pokemons.push({ ...poke, ...sp })
+              break
+            }
           }
-          speciess.push(species)
         }
         $state.loaded()
-        return speciess
       }
     },
   },
