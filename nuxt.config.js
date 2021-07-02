@@ -23,7 +23,11 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/type-to-ja.js'],
+  plugins: [
+    '@/plugins/type-to-ja.js',
+    '@/plugins/fetchData.js',
+    '@/plugins/toJaName.js',
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
