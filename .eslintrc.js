@@ -20,5 +20,6 @@ module.exports = {
     'no-ternary': 'off', // 三項演算子
     'no-nested-ternary': 'off', // 三項演算子
     'no-unneeded-ternary': 'off', // 三項演算子
+    'vue/no-unused-components': 'off', // 使用していないコンポーネント
   },
 }

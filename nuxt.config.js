@@ -27,6 +27,7 @@ export default {
     '@/plugins/type-to-ja.js',
     '@/plugins/fetchData.js',
     '@/plugins/toJaName.js',
+    { src: '@/plugins/localStorage.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
