@@ -13,14 +13,11 @@
 <script>
 export default {
   data() {
-    return {
-      drawer: true,
-    }
+    return {}
   },
   methods: {
     updateDrawer() {
-      this.drawer = !this.drawer
-      this.$nuxt.$emit('updateDrawer', this.drawer)
+      this.$nuxt.$emit('updateDrawer')
     },
   },
 }

@@ -1,22 +1,28 @@
 <template>
   <v-navigation-drawer v-model="drawer" app clipped>
     <v-container>
-      <v-list nav>
+      <v-list nav width="250px">
         <v-list-group
           v-for="nav_list in nav_lists"
           :key="nav_list.name"
-          :prepend-icon="nav_list.icon"
           no-action
-          :append-icon="nav_list.lists ? undefined : ''"
         >
           <template #activator>
+            <v-list-item-avatar>
+              <v-img :src="nav_list.avatar"></v-img>
+            </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{ nav_list.name }}</v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item v-for="list in nav_list.lists" :key="list">
+          <v-list-item
+            v-for="list in nav_list.lists"
+            :key="list.name"
+            nuxt
+            :to="list.link"
+          >
             <v-list-item-content>
-              <v-list-item-title>{{ list }}</v-list-item-title>
+              <v-list-item-title>{{ list.name }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -32,31 +38,42 @@ export default {
       drawer: true,
       nav_lists: [
         {
-          name: 'Getting Started',
-          icon: 'mdi-speedometer',
-          lists: ['Quick Start', 'Pre-made layouts'],
-        },
-        {
-          name: 'Customization',
-          icon: 'mdi-cogs',
-        },
-        {
-          name: 'Styles & animations',
-          icon: 'mdi-palette',
-          lists: ['Colors', 'Content', 'Display'],
-        },
-        {
-          name: 'UI Components',
-          icon: 'mdi-view-dashboard',
-          lists: ['API explorer', 'Alerts'],
-        },
-        {
-          name: 'Directives',
-          icon: 'mdi-function',
-        },
-        {
-          name: 'Preminum themes',
-          icon: 'mdi-vuetify',
+          name: 'ポケモン図鑑',
+          avatar: require('@/assets/img/icon_pokemonzukan.png'),
+          lists: [
+            {
+              name: '第一世代',
+              link: '/generation/first',
+            },
+            {
+              name: '第二世代',
+              link: '/generation/second',
+            },
+            {
+              name: '第三世代',
+              link: '/generation/third',
+            },
+            {
+              name: '第四世代',
+              link: '/generation/fourth',
+            },
+            {
+              name: '第五世代',
+              link: '/generation/fifth',
+            },
+            {
+              name: '第六世代',
+              link: '/generation/sixth',
+            },
+            {
+              name: '第七世代',
+              link: '/generation/seventh',
+            },
+            {
+              name: '第八世代',
+              link: '/generation/eighth',
+            },
+          ],
         },
       ],
     }
@@ -65,8 +82,8 @@ export default {
     this.$nuxt.$on('updateDrawer', this.updateDrawer)
   },
   methods: {
-    updateDrawer(drawer) {
-      this.drawer = drawer
+    updateDrawer() {
+      this.drawer = !this.drawer
     },
   },
 }

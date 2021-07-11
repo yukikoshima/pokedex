@@ -4,8 +4,8 @@
       <v-row dense>
         <!-- ポケモンカード -->
         <v-col
-          v-for="(pokemon, key) in pokemons"
-          :key="key"
+          v-for="pokemon in pokemons"
+          :key="pokemon.pokemon.pokeId"
           cols="4"
           lg="2"
           md="2"
@@ -70,7 +70,7 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import * as rootTypes from '@/store/types/rootType'
+import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
 
 export default {
   components: {
@@ -85,19 +85,21 @@ export default {
   },
   computed: {
     pokemons() {
-      return this.$store.getters.getPokemons
+      return this.$store.getters[getAllPokemonsType.GETTER_POKEMONS]
     },
     pokeNo() {
-      return this.$store.getters.getPokeNo
+      return this.$store.getters[getAllPokemonsType.GETTER_POKE_NO]
     },
   },
   methods: {
     async infiniteHandler($state) {
-      const pokeNo = this.$store.getters.getPokeNo
-      console.log(pokeNo)
+      const pokeNo = this.pokeNo
       if (pokeNo <= this.pokeTotalNumber) {
-        await this.$store.dispatch('fetchPokemons', pokeNo)
-        await this.$store.dispatch('setPokemonNoAction')
+        await this.$store.dispatch(
+          getAllPokemonsType.ACTION_FETCH_POKEMONS,
+          pokeNo
+        )
+        await this.$store.dispatch(getAllPokemonsType.ACTION_SET_POKE_NO)
         $state.loaded()
       } else {
         $state.complete()

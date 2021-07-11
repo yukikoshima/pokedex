@@ -24,7 +24,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@/plugins/type-to-ja.js',
+    '@/plugins/toTypeJa.js',
     '@/plugins/fetchData.js',
     '@/plugins/toJaName.js',
     { src: '@/plugins/localStorage.js', ssr: false },
