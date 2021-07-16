@@ -4,7 +4,7 @@
       <v-row dense>
         <!-- ポケモンカード -->
         <v-col
-          v-for="pokemon in pokemonss"
+          v-for="pokemon in pokemons"
           :key="pokemon.pokeId"
           cols="4"
           lg="2"
@@ -83,7 +83,7 @@ export default {
     }
   },
   computed: {
-    pokemonss() {
+    pokemons() {
       return this.$store.getters[zukanVersionType.GETTER_POKEMONS]
     },
     zukanVer() {
@@ -98,6 +98,9 @@ export default {
       return this.$store.getters[zukanVersionType.GETTER_END_NO]
     },
   },
+  beforeCreate() {
+    this.$store.dispatch(zukanVersionType.ACTION_RESET_STATE)
+  },
   created() {
     const zVer = this.zukanVer
     const startNo = zVer.startNo
@@ -108,20 +111,18 @@ export default {
   },
   methods: {
     async infiniteHandler($state) {
-      console.log(this.startNo)
-      console.log(this.endNo)
       if (!this.startNo || !this.endNo) return
 
       if (this.startNo <= this.endNo) {
-        await this.$store.dispatch(zukanVersionType.ACTION_FETCH_POKEMONS, {
-          startNo: this.startNo,
-          endNo: this.endNo,
-        })
+        await this.$store.dispatch(
+          zukanVersionType.ACTION_FETCH_POKEMONS,
+          this.startNo
+        )
         const nextNo = this.startNo + 1
         await this.$store.dispatch(zukanVersionType.ACTION_SET_START_NO, nextNo)
         $state.loaded()
       } else {
-        $state.computed()
+        $state.complete()
       }
     },
     watchPokemon(pokemon) {

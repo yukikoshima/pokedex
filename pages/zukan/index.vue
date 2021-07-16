@@ -99,7 +99,7 @@ export default {
           getAllPokemonsType.ACTION_FETCH_POKEMONS,
           pokeNo
         )
-        await this.$store.dispatch(getAllPokemonsType.GETTER_START_NO)
+        await this.$store.dispatch(getAllPokemonsType.ACTION_SET_POKE_NO)
         $state.loaded()
       } else {
         $state.complete()
