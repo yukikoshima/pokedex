@@ -1,21 +1,21 @@
 import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
-import Pokemons from '../types/adapters/pokemons'
+// import Pokemons from '../types/adapters/pokemons'
 
-const state = () => {
-  return new Pokemons()
-}
-// const state = () => ({
-//   pokemons: [],
-//   pokemon: {
-//     pokeId: null,
-//     img: '',
-//     typesJa: [],
-//     name: '',
-//     genera: '',
-//     flavorText: '',
-//   },
-//   pokeNo: 1,
-// })
+// const state = () => {
+//   return new Pokemons()
+// }
+const state = () => ({
+  pokemons: [],
+  // pokemon: {
+  //   pokeId: null,
+  //   img: '',
+  //   typesJa: [],
+  //   name: '',
+  //   genera: '',
+  //   flavorText: '',
+  // },
+  pokeNo: 1,
+})
 
 const getters = {
   [getAllPokemonsType.GETTER_POKEMONS](state) {
@@ -27,24 +27,24 @@ const getters = {
 }
 
 const mutations = {
-  [getAllPokemonsType.MUTATION_SET_POKEMONS](state) {
-    state.pokemons.push(state.pokemon)
+  [getAllPokemonsType.MUTATION_SET_POKEMONS](state, pokemon) {
+    state.pokemons.push(pokemon)
   },
-  [getAllPokemonsType.MUTATION_SET_POKEMON](state, pokemon) {
-    state.pokemon = pokemon
-  },
+  // [getAllPokemonsType.MUTATION_SET_POKEMON](state, pokemon) {
+  //   state.pokemon = pokemon
+  // },
   [getAllPokemonsType.MUTATION_SET_POKE_NO](state) {
     state.pokeNo += 1
   },
 }
 
 const actions = {
-  [getAllPokemonsType.ACTION_SET_POKEMONS](context) {
-    context.commit(getAllPokemonsType.MUTATION_SET_POKEMONS)
-  },
-  [getAllPokemonsType.ACTION_SET_POKEMON](context, pokemon) {
-    context.commit(getAllPokemonsType.MUTATION_SET_POKEMON, pokemon)
-  },
+  // [getAllPokemonsType.ACTION_SET_POKEMONS](context) {
+  //   context.commit(getAllPokemonsType.MUTATION_SET_POKEMONS)
+  // },
+  // [getAllPokemonsType.ACTION_SET_POKEMON](context, pokemon) {
+  //   context.commit(getAllPokemonsType.MUTATION_SET_POKEMON, pokemon)
+  // },
   [getAllPokemonsType.ACTION_SET_POKE_NO](context) {
     context.commit(getAllPokemonsType.MUTATION_SET_POKE_NO)
   },
@@ -79,17 +79,16 @@ const actions = {
     const flavorText = that.$toJaName(pokeSp.flavor_text_entries)
 
     if (pokeId === spId) {
-      context.dispatch(getAllPokemonsType.ACTION_SET_POKEMON, {
-        pokemon: {
-          pokeId,
-          img: img || '',
-          typesJa: typesJa || '',
-          name: name ? name.name : '',
-          genera: genera ? genera.genus : '',
-          flavorText: flavorText ? flavorText.flavor_text : '',
-        },
+      context.commit(getAllPokemonsType.MUTATION_SET_POKEMONS, {
+        // pokemon: {
+        pokeId,
+        img: img || '',
+        typesJa: typesJa || '',
+        name: name ? name.name : '',
+        genera: genera ? genera.genus : '',
+        flavorText: flavorText ? flavorText.flavor_text : '',
+        // },
       })
-      context.dispatch(getAllPokemonsType.ACTION_SET_POKEMONS)
     }
   },
 }

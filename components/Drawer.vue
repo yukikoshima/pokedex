@@ -18,8 +18,9 @@
           <v-list-item
             v-for="list in nav_list.lists"
             :key="list.name"
-            nuxt
             :to="list.link"
+            nuxt
+            exact
           >
             <v-list-item-content>
               <v-list-item-title>{{ list.name }}</v-list-item-title>
@@ -42,36 +43,44 @@ export default {
           avatar: require('@/assets/img/icon_pokemonzukan.png'),
           lists: [
             {
-              name: '第一世代',
-              link: '/generation/first',
+              name: '全世代',
+              link: '/zukan',
             },
             {
-              name: '第二世代',
-              link: '/generation/second',
+              name: '赤・緑・青・ピカチュー',
+              link: '/zukan/rgbp',
             },
             {
-              name: '第三世代',
-              link: '/generation/third',
+              name: '金・銀',
+              link: '/zukan/gs',
             },
             {
-              name: '第四世代',
-              link: '/generation/fourth',
+              name: 'ルビー・サファイア',
+              link: '/zukan/rs',
             },
             {
-              name: '第五世代',
-              link: '/generation/fifth',
+              name: 'ダイヤモンド・パール',
+              link: '/zukan/dp',
             },
             {
-              name: '第六世代',
-              link: '/generation/sixth',
+              name: 'ブラック・ホワイト',
+              link: '/zukan/bw',
             },
             {
-              name: '第七世代',
-              link: '/generation/seventh',
+              name: 'X・Y',
+              link: '/zukan/xy',
             },
             {
-              name: '第八世代',
-              link: '/generation/eighth',
+              name: 'サン・ムーン',
+              link: '/zukan/sm',
+            },
+            {
+              name: 'Lets Go! ピカブイ',
+              link: '/zukan/pv',
+            },
+            {
+              name: 'ソード・シールド',
+              link: '/zukan/swsh',
             },
           ],
         },
