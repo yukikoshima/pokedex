@@ -98,10 +98,9 @@ export default {
       return this.$store.getters[zukanVersionType.GETTER_END_NO]
     },
   },
-  beforeCreate() {
-    this.$store.dispatch(zukanVersionType.ACTION_RESET_STATE)
-  },
   created() {
+    this.$store.dispatch(zukanVersionType.ACTION_RESET_STATE)
+
     const zVer = this.zukanVer
     const startNo = zVer.startNo
     const endNo = zVer.endNo
@@ -118,8 +117,7 @@ export default {
           zukanVersionType.ACTION_FETCH_POKEMONS,
           this.startNo
         )
-        const nextNo = this.startNo + 1
-        await this.$store.dispatch(zukanVersionType.ACTION_SET_START_NO, nextNo)
+        await this.$store.dispatch(zukanVersionType.ACTION_INCR_START_NO)
         $state.loaded()
       } else {
         $state.complete()

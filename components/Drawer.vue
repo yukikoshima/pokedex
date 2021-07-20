@@ -88,10 +88,10 @@ export default {
     }
   },
   mounted() {
-    this.$nuxt.$on('updateDrawer', this.updateDrawer)
+    this.$nuxt.$on('switchDrawer', this.switchDrawer)
   },
   methods: {
-    updateDrawer() {
+    switchDrawer() {
       this.drawer = !this.drawer
     },
   },

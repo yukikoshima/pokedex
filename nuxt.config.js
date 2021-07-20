@@ -27,6 +27,8 @@ export default {
     '@/plugins/toTypeJa.js',
     '@/plugins/fetchData.js',
     '@/plugins/toJaName.js',
+    '@/plugins/checkFormat.js',
+    '@/plugins/hiraToKana.js',
     { src: '@/plugins/localStorage.js', ssr: false },
   ],
 

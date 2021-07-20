@@ -2,7 +2,7 @@ import * as zukanVersionType from '@/store/types/zukanVersionType'
 
 const getDefaultState = () => {
   return {
-    pokemonss: [],
+    pokemons: [],
     startNo: null,
     endNo: null,
     version: {
@@ -50,7 +50,7 @@ const state = () => getDefaultState()
 
 const getters = {
   [zukanVersionType.GETTER_POKEMONS](state) {
-    return state.pokemonss
+    return state.pokemons
   },
   [zukanVersionType.GETTER_START_NO](state) {
     return state.startNo
@@ -68,13 +68,16 @@ const mutations = {
     Object.assign(state, getDefaultState())
   },
   [zukanVersionType.MUTATION_SET_POKEMONS](state, pokemon) {
-    state.pokemonss.push(pokemon)
+    state.pokemons.push(pokemon)
   },
   [zukanVersionType.MUTATION_SET_START_NO](state, startNo) {
     state.startNo = startNo
   },
   [zukanVersionType.MUTATION_SET_END_NO](state, endNo) {
     state.endNo = endNo
+  },
+  [zukanVersionType.MUTATION_INCR_START_NO](state) {
+    state.startNo++
   },
 }
 
@@ -87,6 +90,9 @@ const actions = {
   },
   [zukanVersionType.ACTION_SET_END_NO](context, endNo) {
     context.commit(zukanVersionType.MUTATION_SET_END_NO, endNo)
+  },
+  [zukanVersionType.ACTION_INCR_START_NO](context) {
+    context.commit(zukanVersionType.MUTATION_INCR_START_NO)
   },
   async [zukanVersionType.ACTION_FETCH_POKEMONS](context, startNo) {
     const that = this
@@ -102,6 +108,7 @@ const actions = {
         console.log('ポケモン情報取得中にエラーが発生しました')
         console.log(err)
       })
+
     // id、画像、タイプを取得
     const pokeId = poke.id
     const img = poke.sprites.other['official-artwork'].front_default

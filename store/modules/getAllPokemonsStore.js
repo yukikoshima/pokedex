@@ -1,5 +1,4 @@
 import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
-// import Pokemons from '../types/adapters/pokemons'
 
 // const state = () => {
 //   return new Pokemons()
@@ -23,6 +22,22 @@ const getters = {
   },
   [getAllPokemonsType.GETTER_POKE_NO](state) {
     return state.pokeNo
+  },
+  /**
+   *
+   * @returns Object
+   */
+  [getAllPokemonsType.GETTER_POKEMON_AT_ID]: (state) => (id) => {
+    const copyPokemons = JSON.parse(JSON.stringify(state.pokemons))
+    return copyPokemons.find((pokemon) => pokemon.pokeId === id)
+  },
+  /**
+   *
+   * @returns Array
+   */
+  [getAllPokemonsType.GETTER_POKEMON_AT_POKEMON_NAME]: (state) => (name) => {
+    const copyPokemons = JSON.parse(JSON.stringify(state.pokemons))
+    return copyPokemons.filter((pokemon) => pokemon.name.includes(name))
   },
 }
 
