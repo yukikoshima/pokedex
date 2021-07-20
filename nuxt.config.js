@@ -9,7 +9,7 @@ export default {
     titleTemplate: '%s - pokedex',
     title: 'pokedex',
     htmlAttrs: {
-      lang: 'en',
+      lang: 'ja',
     },
     meta: [
       { charset: 'utf-8' },
@@ -23,7 +23,14 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    '@/plugins/toTypeJa.js',
+    '@/plugins/fetchData.js',
+    '@/plugins/toJaName.js',
+    '@/plugins/checkFormat.js',
+    '@/plugins/hiraToKana.js',
+    { src: '@/plugins/localStorage.js', ssr: false },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -49,7 +56,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,

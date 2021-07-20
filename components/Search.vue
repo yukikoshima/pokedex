@@ -1,0 +1,68 @@
+<template>
+  <v-text-field
+    v-model="searchWord"
+    name="pokeSerch"
+    label="ポケモン検索"
+    placeholder="なまえやずかん番号でさがす"
+    hide-details
+    outlined
+    clearable
+    dense
+    type="text"
+    class="ml-16"
+    append-outer-icon="mdi-magnify"
+    @click:append-outer="pokeSearch"
+    @keypress.enter="pokeSearch"
+  >
+  </v-text-field>
+</template>
+
+<script>
+import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
+
+export default {
+  data() {
+    return {
+      searchWord: '',
+      pokemons: [],
+      errMsg: 'ずかん番号やなまえをいれてみてね。',
+    }
+  },
+  methods: {
+    pokeSearch() {
+      // 空文字、nullチェック
+      if (!this.searchWord) {
+        this.$nuxt.$emit('switchSnackbar', this.errMsg)
+        return
+      }
+
+      let pokemon
+      if (this.$checkFormat(this.searchWord, 'number')) {
+        pokemon = this.$store.getters[getAllPokemonsType.GETTER_POKEMON_AT_ID](
+          Number(this.searchWord)
+        )
+
+        if (pokemon) {
+          this.pokemons.push(pokemon)
+          this.$nuxt.$emit('switchDialog', this.pokemons)
+        } else {
+          this.errMsg = '見つからなかったよ。ほかの条件で探してみよう。'
+          this.$nuxt.$emit('switchSnackbar', this.errMsg)
+        }
+      } else {
+        pokemon = this.$store.getters[
+          getAllPokemonsType.GETTER_POKEMON_AT_POKEMON_NAME
+        ](this.$hiraToKana(this.searchWord))
+
+        if (pokemon) {
+          this.pokemons = JSON.parse(JSON.stringify(pokemon))
+          this.$nuxt.$emit('switchDialog', this.pokemons)
+        } else {
+          this.errMsg = '見つからなかったよ。ほかの条件で探してみよう。'
+          this.$nuxt.$emit('switchSnackbar', this.errMsg)
+        }
+      }
+    },
+  },
+}
+</script>
