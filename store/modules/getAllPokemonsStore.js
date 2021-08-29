@@ -85,7 +85,6 @@ const actions = {
     })
     // タイプが英語で返ってくるので日本語に変換
     const typesJa = that.$toTypeJa(types)
-
     // id、名前、種類、説明を取得
     const spId = pokeSp.id
     // 英語で返ってくるので日本語に変換
