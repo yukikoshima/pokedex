@@ -53,8 +53,8 @@ export default {
         pokemon = this.$store.getters[
           getAllPokemonsType.GETTER_POKEMON_AT_POKEMON_NAME
         ](this.$hiraToKana(this.searchWord))
-
-        if (pokemon) {
+        console.log(pokemon)
+        if (pokemon.length) {
           this.pokemons = JSON.parse(JSON.stringify(pokemon))
           this.$nuxt.$emit('switchDialog', this.pokemons)
         } else {

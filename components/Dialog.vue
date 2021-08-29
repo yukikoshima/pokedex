@@ -42,11 +42,10 @@
             <v-card class="v-card-height">
               <v-img :src="showPokemon.img"></v-img>
               <v-container>
-                <v-card elevation="5">
-                  <div class="text-center pa-3">
+                <v-card elevation="2">
+                  <div class="text-center pa-3 text-h5">
                     <p>{{ `No.${showPokemon.pokeId}` }}</p>
-                    {{ showPokemon.name }}
-                    <p></p>
+                    <p class="text-h5">{{ showPokemon.name }}</p>
                   </div>
                 </v-card>
               </v-container>
@@ -56,7 +55,19 @@
                     {{ `分類：${showPokemon.genera}` }}
                   </v-card-title>
                   <v-card-title>
-                    {{ `タイプ：${showPokemon.typesJa}` }}
+                    タイプ：
+                    <div
+                      v-for="(type, index) in showPokemon.typesJa"
+                      :key="index"
+                      class="text-center mr-3"
+                    >
+                      <v-img
+                        :src="require(`@/assets/img/type/${type.link}`)"
+                        max-width="40px"
+                        class="ma-auto"
+                      ></v-img>
+                      <span class="text-body-2">{{ type.name }}</span>
+                    </div>
                   </v-card-title>
                 </v-card>
               </v-container>
