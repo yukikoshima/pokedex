@@ -9,6 +9,7 @@ module.exports = {
   },
   extends: [
     '@nuxtjs',
+    '@nuxtjs/eslint-config-typescript',
     'plugin:prettier/recommended',
     'plugin:nuxt/recommended',
   ],
@@ -21,5 +22,6 @@ module.exports = {
     'no-nested-ternary': 'off', // 三項演算子
     'no-unneeded-ternary': 'off', // 三項演算子
     'vue/no-unused-components': 'off', // 使用していないコンポーネント
+    'comma-dangle': 'off', // 最後のカンマあり
   },
 }
