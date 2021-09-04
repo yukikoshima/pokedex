@@ -17,10 +17,11 @@
   </v-text-field>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
 
-export default {
+export default Vue.extend({
   data() {
     return {
       searchWord: '',
@@ -64,5 +65,5 @@ export default {
       }
     },
   },
-}
+})
 </script>

@@ -79,11 +79,12 @@
   </v-main>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import InfiniteLoading from 'vue-infinite-loading'
 import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
 
-export default {
+export default Vue.extend({
   components: {
     InfiniteLoading,
   },
@@ -121,7 +122,7 @@ export default {
       this.showPokemon = pokemon
     },
   },
-}
+})
 </script>
 
 <style scoped>

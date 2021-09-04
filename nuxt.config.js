@@ -24,12 +24,12 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@/plugins/toTypeJa.ts',
-    '@/plugins/fetchData.ts',
-    '@/plugins/toJaName.ts',
-    '@/plugins/checkFormat.ts',
-    '@/plugins/hiraToKana.ts',
-    { src: '@/plugins/localStorage.js', ssr: false },
+    '@/plugins/toTypeJa',
+    '@/plugins/fetchData',
+    '@/plugins/toJaName',
+    '@/plugins/checkFormat',
+    '@/plugins/hiraToKana',
+    { src: '@/plugins/localStorage', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

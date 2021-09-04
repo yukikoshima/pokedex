@@ -86,8 +86,10 @@
   </v-row>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   data() {
     return {
       dialog: false,
@@ -97,6 +99,9 @@ export default {
     }
   },
   mounted() {
+    /**
+     * switchDialogの呼び出し
+     */
     this.$nuxt.$on('switchDialog', this.switchDialog)
   },
   methods: {
@@ -113,5 +118,5 @@ export default {
       this.showPokemon = pokemon
     },
   },
-}
+})
 </script>

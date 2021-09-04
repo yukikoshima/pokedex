@@ -79,11 +79,12 @@
   </v-main>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import InfiniteLoading from 'vue-infinite-loading'
 import * as zukanVersionType from '@/store/types/zukanVersionType'
 
-export default {
+export default Vue.extend({
   components: {
     InfiniteLoading,
   },
@@ -139,5 +140,5 @@ export default {
       this.showPokemon = pokemon
     },
   },
-}
+})
 </script>

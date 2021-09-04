@@ -4,9 +4,9 @@ module.exports = {
     browser: true,
     node: true,
   },
-  parserOptions: {
-    parser: 'babel-eslint',
-  },
+  // parserOptions: {
+  //   parser: 'babel-eslint',
+  // },
   extends: [
     '@nuxtjs',
     '@nuxtjs/eslint-config-typescript',
@@ -17,6 +17,7 @@ module.exports = {
   // add your custom rules here
   rules: {
     'no-unused-vars': 'off', // 未使用の変数
+    '@typescript-eslint/no-unused-vars': 'warn', // 未使用の変数
     'prefer-const': 'off', // 強制const変数
     'no-ternary': 'off', // 三項演算子
     'no-nested-ternary': 'off', // 三項演算子

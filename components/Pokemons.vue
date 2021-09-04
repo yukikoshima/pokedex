@@ -55,10 +55,10 @@
   </v-main>
 </template>
 
-<script>
-// import InfiniteLoading from 'vue-infinite-loading'
+<script lang="ts">
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   // components: {
   //   InfiniteLoading,
   // },
@@ -83,7 +83,7 @@ export default {
       this.showPokemon = pokemon.pokemon
     },
   },
-}
+})
 </script>
 
 <style scoped>

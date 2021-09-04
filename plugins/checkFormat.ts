@@ -1,4 +1,6 @@
-const checkFormat = (str, formatName) => {
+// import { Plugin } from '@nuxt/types'
+
+const checkFormat = (str: string, formatName: string): boolean => {
   switch (formatName) {
     case 'alphabet':
       // 半角英字（大文字・小文字）
@@ -25,10 +27,14 @@ const checkFormat = (str, formatName) => {
       // 整数値か小数値
       return str.match(/^[-|+]?[0-9]+\.[0-9]+$|^[+|-]?[0-9]+$/) ? true : false
     default:
-      break
+      return false
   }
 }
 
 export default (context, inject) => {
   inject('checkFormat', checkFormat)
 }
+
+// export const plugin: Plugin = (context, inject) => {
+//   inject('checkFormat', checkFormat)
+// }
