@@ -1,3 +1,4 @@
+import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
 
 // const state = () => {
