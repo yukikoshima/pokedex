@@ -1,0 +1,19 @@
+query pokeAPIquery {
+  pokemons: pokemon_v2_pokemon(limit: 10) {
+    id
+    types: pokemon_v2_pokemontypes {
+      type: pokemon_v2_type {
+        name
+      }
+    }
+  }
+  species: pokemon_v2_pokemonspeciesname(where: { language_id: { _eq: 1 } }) {
+    id
+    name
+    genus
+  }
+  text: pokemon_v2_pokemonspeciesflavortext(where: {}) {
+    flavor_text
+    language_id
+  }
+}

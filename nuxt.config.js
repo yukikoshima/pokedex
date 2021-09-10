@@ -48,10 +48,21 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/apollo',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
+
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: 'https://beta.pokeapi.co/graphql/v1beta',
+        // httpEndpoint: 'https://graphql-pokemon2.vercel.app/',
+        // httpEndpoint: 'https://graphql-pokeapi.graphcdn.app/'
+      }
+    }
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
