@@ -50,6 +50,13 @@ export default {
     '@nuxtjs/axios',
   ],
 
+  // Server Middleware
+  serverMiddleware: {
+    '/api': '~/api',
+  },
+  // serverMiddleware: ['~/api/index.js'],
+
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 
