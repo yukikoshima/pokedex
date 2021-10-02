@@ -13,7 +13,11 @@
           xs="1"
         >
           <v-card outlined tile hover @click="watchPokemon(pokemon)">
-            <v-img :src="pokemon.img"></v-img>
+            <img
+              v-lazy="pokemon.img"
+              alt="pokemon.name"
+              class="v-image v-responsive"
+            />
           </v-card>
           <p>{{ pokemon.name }}</p>
         </v-col>
@@ -62,35 +66,17 @@
           </v-container>
         </v-card>
       </v-dialog>
-
-      <!-- ローディング -->
-      <div infinite-wrapper>
-        <infinite-loading
-          force-use-infinite-wrapper
-          @infinite="infiniteHandler1"
-        >
-          <!-- 結果が存在しない場合下記が表示される -->
-          <span slot="no-results">-----検索結果はありません-----</span>
-          <!-- ステータスがcompleteに更新されると下記が表示される -->
-          <span slot="no-more">-----検索結果は以上です-----</span>
-        </infinite-loading>
-      </div>
     </v-container>
   </v-main>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import InfiniteLoading from 'vue-infinite-loading'
 import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
 
 export default Vue.extend({
-  components: {
-    InfiniteLoading,
-  },
   data() {
     return {
-      pokeTotalNumber: 898,
       dialog: false,
       showPokemon: {},
     }
@@ -104,19 +90,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    async infiniteHandler1($state) {
-      const pokeNo = this.pokeNo
-      if (pokeNo <= this.pokeTotalNumber) {
-        await this.$store.dispatch(
-          getAllPokemonsType.ACTION_FETCH_POKEMONS,
-          pokeNo
-        )
-        await this.$store.dispatch(getAllPokemonsType.ACTION_SET_POKE_NO)
-        $state.loaded()
-      } else {
-        $state.complete()
-      }
-    },
     watchPokemon(pokemon) {
       this.dialog = !this.dialog
       this.showPokemon = pokemon
@@ -132,5 +105,16 @@ li {
 .v-card-height {
   height: 865px;
   max-height: 925px;
+}
+.v-image {
+  z-index: 0;
+  color: rgba(0, 0, 0, 87);
+}
+.v-responsive {
+  position: relative;
+  overflow: hidden;
+  flex: 1 0 auto;
+  max-width: 100%;
+  display: flex;
 }
 </style>

@@ -38,6 +38,7 @@ export default Vue.extend({
       }
 
       let pokemon
+      // 数字の場合
       if (this.$checkFormat(this.searchWord, 'number')) {
         pokemon = this.$store.getters[getAllPokemonsType.GETTER_POKEMON_AT_ID](
           Number(this.searchWord)
@@ -51,12 +52,15 @@ export default Vue.extend({
           this.$nuxt.$emit('switchSnackbar', this.errMsg)
         }
       } else {
+        // 文字列の場合
         pokemon = this.$store.getters[
           getAllPokemonsType.GETTER_POKEMON_AT_POKEMON_NAME
         ](this.$hiraToKana(this.searchWord))
-        console.log(pokemon)
+
         if (pokemon.length) {
-          this.pokemons = JSON.parse(JSON.stringify(pokemon))
+          // ディープコピー
+          // this.pokemons = JSON.parse(JSON.stringify(pokemon))
+          this.pokemons = [...pokemon]
           this.$nuxt.$emit('switchDialog', this.pokemons)
         } else {
           this.errMsg = '見つからなかったよ。ほかの条件で探してみよう。'

@@ -1,4 +1,4 @@
-import { GetterTree, ActionTree, MutationTree } from 'vuex'
+// import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
 
 // const state = () => {
@@ -6,6 +6,7 @@ import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
 // }
 const state = () => ({
   pokemons: [],
+  lastNo: 898,
   // pokemon: {
   //   pokeId: null,
   //   img: '',
@@ -14,7 +15,7 @@ const state = () => ({
   //   genera: '',
   //   flavorText: '',
   // },
-  pokeNo: 1,
+  // pokeNo: 1,
 })
 
 const getters = {
@@ -46,51 +47,45 @@ const mutations = {
   [getAllPokemonsType.MUTATION_SET_POKEMONS](state, pokemon) {
     state.pokemons.push(pokemon)
   },
-  // [getAllPokemonsType.MUTATION_SET_POKEMON](state, pokemon) {
-  //   state.pokemon = pokemon
-  // },
+
   [getAllPokemonsType.MUTATION_SET_POKE_NO](state) {
     state.pokeNo += 1
   },
 }
 
 const actions = {
-  // [getAllPokemonsType.ACTION_SET_POKEMONS](context) {
-  //   context.commit(getAllPokemonsType.MUTATION_SET_POKEMONS)
-  // },
-  // [getAllPokemonsType.ACTION_SET_POKEMON](context, pokemon) {
-  //   context.commit(getAllPokemonsType.MUTATION_SET_POKEMON, pokemon)
-  // },
   [getAllPokemonsType.ACTION_SET_POKE_NO](context) {
     context.commit(getAllPokemonsType.MUTATION_SET_POKE_NO)
   },
-  async [getAllPokemonsType.ACTION_FETCH_POKEMONS](context, pokeNo) {
-    const that = this
 
-    await Promise.all([
-      that.$fetchData(`https://pokeapi.co/api/v2/pokemon/${pokeNo}`),
-      that.$fetchData(`https://pokeapi.co/api/v2/pokemon-species/${pokeNo}`),
-    ])
-      .then((res) => {
-        const poke = res[0]
-        const pokeSp = res[1]
-        // id、画像、タイプを取得
-        const pokeId = poke.id
-        const img = poke.sprites.other['official-artwork'].front_default
-        const types = poke.types.map((ele) => {
-          return ele.type.name
-        })
-        // タイプが英語で返ってくるので日本語に変換
-        const typesJa = that.$toTypeJa(types)
-        // id、名前、種類、説明を取得
-        const spId = pokeSp.id
-        // 英語で返ってくるので日本語に変換
-        const name = that.$toJaName(pokeSp.names)
-        const genera = that.$toJaName(pokeSp.genera)
-        const flavorText = that.$toJaName(pokeSp.flavor_text_entries)
+  async [getAllPokemonsType.ACTION_FETCH_POKEMONS]({ commit, state }) {
+    let pokeNo = Number(sessionStorage.getItem('pokeNo'))
+    while (pokeNo <= state.lastNo) {
+      console.log(pokeNo)
+      await Promise.all([
+        this.$axios.$get(`https://pokeapi.co/api/v2/pokemon/${pokeNo}`),
+        this.$axios.$get(`https://pokeapi.co/api/v2/pokemon-species/${pokeNo}`),
+      ])
+        .then(([rpoke, rpokeSp]) => {
+          const poke = rpoke
+          const pokeSp = rpokeSp
+          // id、画像、タイプを取得
+          const pokeId = poke.id
+          const img = poke.sprites.other['official-artwork'].front_default
+          const types = poke.types.map((ele) => {
+            return ele.type.name
+          })
+          // タイプが英語で返ってくるので日本語に変換
+          const typesJa = this.$toTypeJa(types)
+          // id、名前、種類、説明を取得
+          // const spId = pokeSp.id
+          // 英語で返ってくるので日本語に変換
+          const name = this.$toJaName(pokeSp.names)
+          const genera = this.$toJaName(pokeSp.genera)
+          const flavorText = this.$toJaName(pokeSp.flavor_text_entries)
 
-        if (pokeId === spId) {
-          context.commit(getAllPokemonsType.MUTATION_SET_POKEMONS, {
+          // if (pokeId === spId) {
+          commit(getAllPokemonsType.MUTATION_SET_POKEMONS, {
             // pokemon: {
             pokeId,
             img: img || '',
@@ -100,12 +95,16 @@ const actions = {
             flavorText: flavorText ? flavorText.flavor_text : '',
             // },
           })
-        }
-      })
-      .catch((err) => {
-        console.log('ポケモン情報取得中にエラーが発生しました')
-        console.log(err)
-      })
+          // commit(getAllPokemonsType.MUTATION_SET_POKE_NO)
+          // }
+          sessionStorage.setItem('pokeNo', String((pokeNo += 1)))
+          pokeNo = Number(sessionStorage.getItem('pokeNo'))
+        })
+        .catch((err) => {
+          console.log('ポケモン情報取得中にエラーが発生しました')
+          console.log(err)
+        })
+    }
   },
 }
 
