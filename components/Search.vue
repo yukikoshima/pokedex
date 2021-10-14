@@ -31,25 +31,27 @@ export default Vue.extend({
   },
   methods: {
     pokeSearch() {
-      // 空文字、nullチェック
-      if (!this.searchWord) {
+      // 前回の検索が残らないように初期化
+      this.pokemons = []
+
+      // 空文字、null、空白文字チェック
+      if (!this.searchWord || !this.searchWord.match(/\S/g)) {
         this.$nuxt.$emit('switchSnackbar', this.errMsg)
         return
       }
 
+      // 数字の時は必ずオブジェクト、文字列の場合はオブジェクトまたは配列
       let pokemon
       // 数字の場合
       if (this.$checkFormat(this.searchWord, 'number')) {
         pokemon = this.$store.getters[getAllPokemonsType.GETTER_POKEMON_AT_ID](
           Number(this.searchWord)
         )
-
         if (pokemon) {
           this.pokemons.push(pokemon)
           this.$nuxt.$emit('switchDialog', this.pokemons)
-        } else {
-          this.errMsg = '見つからなかったよ。ほかの条件で探してみよう。'
-          this.$nuxt.$emit('switchSnackbar', this.errMsg)
+
+          return
         }
       } else {
         // 文字列の場合
@@ -62,11 +64,13 @@ export default Vue.extend({
           // this.pokemons = JSON.parse(JSON.stringify(pokemon))
           this.pokemons = [...pokemon]
           this.$nuxt.$emit('switchDialog', this.pokemons)
-        } else {
-          this.errMsg = '見つからなかったよ。ほかの条件で探してみよう。'
-          this.$nuxt.$emit('switchSnackbar', this.errMsg)
+
+          return
         }
       }
+
+      this.errMsg = '見つからなかったよ。ほかの条件で探してみよう。'
+      this.$nuxt.$emit('switchSnackbar', this.errMsg)
     },
   },
 })

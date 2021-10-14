@@ -8,18 +8,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import PokemonCard from '~/components/Common/PokemonCard.vue'
-import * as zukanVersionType from '@/store/types/zukanVersionType'
+import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
 
 export default Vue.extend({
   components: {
     PokemonCard,
   },
-  middleware: ['zukanVersion'],
   computed: {
-    pokemons() {
-      return this.$store.getters[zukanVersionType.GETTER_POKEMONS]
-    },
+    // pokemons() {
+    //   return this.$store.getters[getAllPokemonsType.GETTER_POKEMONS]
+    // },
+    ...mapGetters({ pokemons: getAllPokemonsType.GETTER_POKEMONS }),
   },
 })
 </script>

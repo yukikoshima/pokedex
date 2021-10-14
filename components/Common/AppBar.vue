@@ -18,8 +18,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import ErrorSnackbar from '@/components/Common/ErrorSnackbar.vue'
 
 export default Vue.extend({
+  components: {
+    ErrorSnackbar,
+  },
   data() {
     return {}
   },
