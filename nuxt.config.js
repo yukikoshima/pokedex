@@ -24,12 +24,15 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@/plugins/toTypeJa.js',
-    '@/plugins/fetchData.js',
-    '@/plugins/toJaName.js',
-    '@/plugins/checkFormat.js',
-    '@/plugins/hiraToKana.js',
-    { src: '@/plugins/localStorage.js', ssr: false },
+    { src: '@/plugins/persistedstate', ssr: false },
+    { src: '@/plugins/getAllPokemons', ssr: false },
+    '@/plugins/vuexRouterSync',
+    '@/plugins/lazyload',
+    '@/plugins/toTypeJa',
+    '@/plugins/fetchData',
+    '@/plugins/toJaName',
+    '@/plugins/checkFormat',
+    '@/plugins/hiraToKana',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -41,6 +44,7 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxt/typescript-build',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
