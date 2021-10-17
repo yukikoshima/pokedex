@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="drawer" app clipped>
+  <v-navigation-drawer v-model="isDrawer" app clipped>
     <v-container>
       <v-list nav width="250px">
         <v-list-group
@@ -38,7 +38,7 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-      drawer: true,
+      isDrawer: true,
       nav_lists: [
         {
           name: 'ポケモン図鑑',
@@ -90,11 +90,11 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.$nuxt.$on('switchDrawer', this.switchDrawer)
+    this.$nuxt.$on('openDrawer', this.openDrawer)
   },
   methods: {
-    switchDrawer() {
-      this.drawer = !this.drawer
+    openDrawer() {
+      this.isDrawer = !this.isDrawer
     },
   },
 })
