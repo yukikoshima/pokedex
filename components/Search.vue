@@ -36,7 +36,7 @@ export default Vue.extend({
 
       // 空文字、null、空白文字チェック
       if (!this.searchWord || !this.searchWord.match(/\S/g)) {
-        this.$nuxt.$emit('switchSnackbar', this.errMsg)
+        this.$nuxt.$emit('showSnackbar', this.errMsg)
         return
       }
 
@@ -49,7 +49,7 @@ export default Vue.extend({
         )
         if (pokemon) {
           this.pokemons.push(pokemon)
-          this.$nuxt.$emit('switchDialog', this.pokemons)
+          this.$nuxt.$emit('dialog', this.pokemons)
 
           return
         }
@@ -63,14 +63,14 @@ export default Vue.extend({
           // ディープコピー
           // this.pokemons = JSON.parse(JSON.stringify(pokemon))
           this.pokemons = [...pokemon]
-          this.$nuxt.$emit('switchDialog', this.pokemons)
+          this.$nuxt.$emit('dialog', this.pokemons)
 
           return
         }
       }
 
       this.errMsg = '見つからなかったよ。ほかの条件で探してみよう。'
-      this.$nuxt.$emit('switchSnackbar', this.errMsg)
+      this.$nuxt.$emit('showSnackbar', this.errMsg)
     },
   },
 })

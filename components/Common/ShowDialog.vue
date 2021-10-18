@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isDisplay" scrollable height="490px" max-width="490px">
+  <v-dialog v-model="isDialog" scrollable height="490px" max-width="490px">
     <v-card class="v-card-height">
       <v-img :src="pokemon.img"></v-img>
       <v-container>
@@ -49,14 +49,14 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-      isDisplay: false,
+      isDialog: false,
       pokemon: {},
     }
   },
   methods: {
-    open(pokemon, isDisplay) {
+    show(pokemon, isDialog) {
       this.pokemon = pokemon
-      this.isDisplay = isDisplay
+      this.isDialog = isDialog
     },
   },
 })

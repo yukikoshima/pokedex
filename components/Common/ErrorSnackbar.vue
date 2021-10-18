@@ -10,7 +10,7 @@
   >
     {{ msg }}
     <template #action="{ attrs }">
-      <v-btn color="white" text v-bind="attrs" @click="switchSnackbar">
+      <v-btn color="white" text v-bind="attrs" @click="showSnackbar">
         Close
       </v-btn>
     </template>
@@ -30,10 +30,10 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.$nuxt.$on('switchSnackbar', this.switchSnackbar)
+    this.$nuxt.$on('showSnackbar', this.showSnackbar)
   },
   methods: {
-    switchSnackbar(msg) {
+    showSnackbar(msg) {
       this.snackbar = !this.snackbar
       this.msg = msg
     },

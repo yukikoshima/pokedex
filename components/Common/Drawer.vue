@@ -90,10 +90,10 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.$nuxt.$on('openDrawer', this.openDrawer)
+    this.$nuxt.$on('switchDrawer', this.switchDrawer)
   },
   methods: {
-    openDrawer() {
+    switchDrawer() {
       this.isDrawer = !this.isDrawer
     },
   },

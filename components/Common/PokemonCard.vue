@@ -11,7 +11,7 @@
         sm="2"
         xs="1"
       >
-        <v-card outlined tile hover @click="onClickOpenShowDialog(pokemon)">
+        <v-card outlined tile hover @click="showDialog(pokemon)">
           <img
             v-lazy="pokemon.img"
             alt="pokemon.name"
@@ -40,8 +40,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    onClickOpenShowDialog(pokemon) {
-      this.$refs.showDialog.open(pokemon, true)
+    showDialog(pokemon) {
+      this.$refs.showDialog.show(pokemon, true)
     },
   },
 })
