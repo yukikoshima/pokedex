@@ -1,7 +1,7 @@
 <template>
   <!-- <div class="text-center ma-2"> -->
   <v-snackbar
-    v-model="snackbar"
+    v-model="isSnackbar"
     :timeout="timeout"
     absolute
     centered
@@ -10,8 +10,8 @@
   >
     {{ msg }}
     <template #action="{ attrs }">
-      <v-btn color="white" text v-bind="attrs" @click="showSnackbar">
-        Close
+      <v-btn color="white" text v-bind="attrs" @click="hideSnackbar">
+        閉じる
       </v-btn>
     </template>
   </v-snackbar>
@@ -26,7 +26,7 @@ export default Vue.extend({
     return {
       msg: '',
       timeout: 3000,
-      snackbar: false,
+      isSnackbar: false,
     }
   },
   mounted() {
@@ -34,8 +34,11 @@ export default Vue.extend({
   },
   methods: {
     showSnackbar(msg) {
-      this.snackbar = !this.snackbar
+      this.isSnackbar = true
       this.msg = msg
+    },
+    hideSnackbar() {
+      this.isSnackbar = false
     },
   },
 })

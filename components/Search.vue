@@ -26,7 +26,7 @@ export default Vue.extend({
     return {
       searchWord: '',
       pokemons: [],
-      errMsg: 'ずかん番号やなまえをいれてみてね。',
+      errMsg: '',
     }
   },
   methods: {
@@ -36,6 +36,7 @@ export default Vue.extend({
 
       // 空文字、null、空白文字チェック
       if (!this.searchWord || !this.searchWord.match(/\S/g)) {
+        this.errMsg = 'ずかん番号やなまえをいれてみてね。'
         this.$nuxt.$emit('showSnackbar', this.errMsg)
         return
       }

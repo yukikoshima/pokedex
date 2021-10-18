@@ -43,11 +43,11 @@ export default Vue.extend({
   },
   methods: {
     dialog(pokemons) {
-      this.isDialog = !this.isDialog
+      this.isDialog = true
       this.pokemons = pokemons
     },
     closeDialog() {
-      this.isDialog = !this.isDialog
+      this.isDialog = false
     },
   },
 })
