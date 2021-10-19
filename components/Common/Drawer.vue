@@ -3,20 +3,32 @@
     <v-container>
       <v-list nav width="250px">
         <v-list-group
-          v-for="nav_list in nav_lists"
-          :key="nav_list.name"
+          v-for="navList in navLists"
+          :key="navList.name"
           no-action
+          :append-icon="navList.lists ? undefined : ''"
+          value="true"
         >
           <template #activator>
-            <v-list-item-avatar>
-              <v-img :src="nav_list.avatar"></v-img>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ nav_list.name }}</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item v-if="navList.lists" class="mb-0">
+              <v-list-item-avatar>
+                <v-img :src="navList.avatar"></v-img>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ navList.name }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item v-else :to="navList.link">
+              <v-list-item-avatar>
+                <v-img :src="navList.avatar"></v-img>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ navList.name }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </template>
           <v-list-item
-            v-for="list in nav_list.lists"
+            v-for="list in navList.lists"
             :key="list.name"
             :to="list.link"
             nuxt
@@ -39,7 +51,7 @@ export default Vue.extend({
   data() {
     return {
       isDrawer: true,
-      nav_lists: [
+      navLists: [
         {
           name: 'ポケモン図鑑',
           avatar: require('@/assets/img/icon_pokemonzukan.png'),
@@ -86,6 +98,11 @@ export default Vue.extend({
             },
           ],
         },
+        {
+          name: 'しりとり',
+          avatar: require('@/assets/img/icon_pokemonzukan.png'),
+          link: '/zukan/test',
+        },
       ],
     }
   },
@@ -99,3 +116,9 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style>
+.v-list-item__icon {
+  margin-left: 0 !important;
+}
+</style>

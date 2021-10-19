@@ -23,9 +23,6 @@ export default Vue.extend({
   components: {
     ErrorSnackbar,
   },
-  data() {
-    return {}
-  },
   methods: {
     switchDrawer() {
       this.$nuxt.$emit('switchDrawer')
