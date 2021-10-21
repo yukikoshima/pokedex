@@ -50,7 +50,7 @@ export default Vue.extend({
         )
         if (pokemon) {
           this.pokemons.push(pokemon)
-          this.$nuxt.$emit('dialog', this.pokemons)
+          this.$nuxt.$emit('openDialog', this.pokemons)
 
           return
         }
@@ -64,7 +64,7 @@ export default Vue.extend({
           // ディープコピー
           // this.pokemons = JSON.parse(JSON.stringify(pokemon))
           this.pokemons = [...pokemon]
-          this.$nuxt.$emit('dialog', this.pokemons)
+          this.$nuxt.$emit('openDialog', this.pokemons)
 
           return
         }

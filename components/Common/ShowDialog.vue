@@ -3,41 +3,35 @@
     <v-card class="v-card-height">
       <v-img :src="pokemon.img"></v-img>
       <v-container>
-        <v-card elevation="2">
-          <div class="text-center pa-3 text-h5">
-            <p>{{ `No.${pokemon.pokeId}` }}</p>
-            <p class="text-h5">{{ pokemon.name }}</p>
-          </div>
-        </v-card>
+        <div class="text-center text-h5">
+          <p>{{ `No.${pokemon.pokeId}` }}</p>
+          <p class="text-h5">{{ pokemon.name }}</p>
+        </div>
       </v-container>
       <v-container v-if="pokemon.genera && pokemon.typesJa">
-        <v-card elevation="2">
-          <v-card-title>
-            {{ `分類：${pokemon.genera}` }}
-          </v-card-title>
-          <v-card-title>
-            タイプ：
-            <div
-              v-for="(type, index) in pokemon.typesJa"
-              :key="index"
-              class="text-center mr-3"
-            >
-              <v-img
-                :src="require(`@/assets/img/type/${type.link}`)"
-                max-width="40px"
-                class="ma-auto"
-              ></v-img>
-              <span class="text-body-2">{{ type.name }}</span>
-            </div>
-          </v-card-title>
-        </v-card>
+        <v-card-title>
+          {{ `分類：${pokemon.genera}` }}
+        </v-card-title>
+        <v-card-title>
+          タイプ：
+          <div
+            v-for="(type, index) in pokemon.typesJa"
+            :key="index"
+            class="text-center mr-3"
+          >
+            <v-img
+              :src="require(`@/assets/img/type/${type.link}`)"
+              max-width="40px"
+              class="ma-auto"
+            ></v-img>
+            <span class="text-body-2">{{ type.name }}</span>
+          </div>
+        </v-card-title>
       </v-container>
       <v-container v-if="pokemon.flavorText">
-        <v-card elevation="2">
-          <v-card-title>
-            {{ pokemon.flavorText }}
-          </v-card-title>
-        </v-card>
+        <v-card-title>
+          {{ pokemon.flavorText }}
+        </v-card-title>
       </v-container>
     </v-card>
   </v-dialog>

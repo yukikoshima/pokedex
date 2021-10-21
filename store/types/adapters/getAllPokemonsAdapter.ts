@@ -1,43 +1,30 @@
+export class GetAllPokemonsAdapter {
+  static lastNo: number = 898
+  // eslint-disable-next-line no-use-before-define
+  constructor(public getAllPokemonsList: GetAllPokemons[] = []) {}
+}
+
 type TypesJa = {
-  [key: string]: {
+  [key: number]: {
     name: string
     link: string
   }
 }
 
-type Name = {
-  language: {
-    name: string
-    url: string
-  }
-  name: string
-}
-
-type Genera = {
-  genus: string
-  language: {
-    name: string
-    url: string
-  }
-}
-
-type FlavorText = {
-  flavor_test: string
-  language: {
-    name: string
-    url: string
-  }
-  version: {
-    name: string
-    url: string
-  }
-}
-
-export type GetAllPokemons = {
+type GetAllPokemons = {
   pokeId: number
   img: string
   typesJa: TypesJa[]
-  name: Name
-  genera: Genera
-  flavorText: FlavorText
+  name: string
+  genera: string
+  flavorText: string
+}
+
+export type PokemonProcessingResponseType = {
+  pokeId: number
+  img: string
+  typesJa: TypesJa[]
+  name: string
+  genera: string
+  flavorText: string
 }

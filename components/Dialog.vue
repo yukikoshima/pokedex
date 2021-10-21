@@ -39,10 +39,10 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.$nuxt.$on('dialog', this.dialog)
+    this.$nuxt.$on('openDialog', this.openDialog)
   },
   methods: {
-    dialog(pokemons) {
+    openDialog(pokemons) {
       this.isDialog = true
       this.pokemons = pokemons
     },
