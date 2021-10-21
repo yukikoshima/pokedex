@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-dialog
-      v-model="isDisplay"
+      v-model="isDialog"
       fullscreen
       hide-overlay
       transition="dialog-bottom-transition"
@@ -34,20 +34,20 @@ export default Vue.extend({
   },
   data() {
     return {
-      isDisplay: false,
+      isDialog: false,
       pokemons: [],
     }
   },
   mounted() {
-    this.$nuxt.$on('switchDialog', this.switchDialog)
+    this.$nuxt.$on('openDialog', this.openDialog)
   },
   methods: {
-    switchDialog(pokemons) {
-      this.isDisplay = !this.isDisplay
+    openDialog(pokemons) {
+      this.isDialog = true
       this.pokemons = pokemons
     },
     closeDialog() {
-      this.isDisplay = !this.isDisplay
+      this.isDialog = false
     },
   },
 })

@@ -1,34 +1,48 @@
-// import { GetterTree, ActionTree, MutationTree } from 'vuex'
+// eslint-disable-next-line import/named
+import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
+import {
+  GetAllPokemonsAdapter,
+  PokemonProcessingResponseType,
+} from '@/store/types/adapters/getAllPokemonsAdapter'
 
-const state = () => ({
-  pokemons: [],
-  lastNo: 898,
-})
-
-const getters = {
-  [getAllPokemonsType.GETTER_POKEMONS](state) {
-    return state.pokemons
-  },
-  [getAllPokemonsType.GETTER_POKEMON_AT_ID]: (state) => (id) => {
-    return state.pokemons.find((pokemon) => pokemon.pokeId === id)
-  },
-  [getAllPokemonsType.GETTER_POKEMON_AT_POKEMON_NAME]: (state) => (name) => {
-    return state.pokemons.filter((pokemon) => pokemon.name.includes(name))
-  },
+const state = () => {
+  return new GetAllPokemonsAdapter()
 }
 
-const mutations = {
-  [getAllPokemonsType.MUTATION_SET_POKEMONS](state, pokemon) {
-    state.pokemons.push(pokemon)
+type getAllPokemonsList = ReturnType<typeof state>
+
+const getters: GetterTree<getAllPokemonsList, getAllPokemonsList> = {
+  [getAllPokemonsType.GETTER_POKEMONS](state: getAllPokemonsList) {
+    return [...state.getAllPokemonsList]
+  },
+  [getAllPokemonsType.GETTER_POKEMON_AT_ID]:
+    (state: getAllPokemonsList) => (id: number) => {
+      return state.getAllPokemonsList.find((pokemon) => pokemon.pokeId === id)
+    },
+  [getAllPokemonsType.GETTER_POKEMON_AT_POKEMON_NAME]:
+    (state: getAllPokemonsList) => (name: string) => {
+      return state.getAllPokemonsList.filter((pokemon) =>
+        pokemon.name.includes(name)
+      )
+    },
+}
+
+const mutations: MutationTree<getAllPokemonsList> = {
+  [getAllPokemonsType.MUTATION_SET_POKEMONS](
+    state: getAllPokemonsList,
+    pokemon: PokemonProcessingResponseType
+  ) {
+    state.getAllPokemonsList.push(pokemon)
   },
 }
 
 const actions = {
-  async [getAllPokemonsType.ACTION_FETCH_POKEMONS]({ commit, state }) {
+  async [getAllPokemonsType.ACTION_FETCH_POKEMONS]({ commit }) {
+    const lastNo = GetAllPokemonsAdapter.lastNo
     let pokeNo = Number(sessionStorage.getItem('pokeNo'))
 
-    while (pokeNo <= state.lastNo) {
+    while (pokeNo <= lastNo) {
       await Promise.all([
         this.$axios.$get(`https://pokeapi.co/api/v2/pokemon/${pokeNo}`),
         this.$axios.$get(`https://pokeapi.co/api/v2/pokemon-species/${pokeNo}`),
@@ -51,20 +65,22 @@ const actions = {
           const genera = this.$toJaName(pokeSp.genera)
           const flavorText = this.$toJaName(pokeSp.flavor_text_entries)
 
-          commit(getAllPokemonsType.MUTATION_SET_POKEMONS, {
+          const pokemon: PokemonProcessingResponseType = {
             pokeId,
-            img: img || '',
-            typesJa: typesJa || '',
-            name: name ? name.name : '',
-            genera: genera ? genera.genus : '',
-            flavorText: flavorText ? flavorText.flavor_text : '',
-          })
+            img,
+            typesJa,
+            name,
+            genera,
+            flavorText,
+          }
+          commit(getAllPokemonsType.MUTATION_SET_POKEMONS, pokemon)
+
           sessionStorage.setItem('pokeNo', String((pokeNo += 1)))
           pokeNo = Number(sessionStorage.getItem('pokeNo'))
         })
         .catch((err) => {
           console.log('ポケモン情報取得中にエラーが発生しました')
-          console.log(err)
+          console.error(err)
         })
     }
   },
