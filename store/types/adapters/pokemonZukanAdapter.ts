@@ -1,7 +1,10 @@
-export class GetAllPokemonsAdapter {
+/* eslint-disable no-use-before-define */
+export class PokemonZukanAdapter {
   static lastNo: number = 898
-  // eslint-disable-next-line no-use-before-define
-  constructor(public getAllPokemonsList: GetAllPokemons[] = []) {}
+  constructor(
+    public allPokemonList: PokemonData[] = [],
+    public pokemonByVersionList: PokemonData[] = []
+  ) {}
 }
 
 type TypesJa = {
@@ -11,7 +14,7 @@ type TypesJa = {
   }
 }
 
-type GetAllPokemons = {
+type PokemonData = {
   pokeId: number
   img: string
   typesJa: TypesJa[]
@@ -20,7 +23,7 @@ type GetAllPokemons = {
   flavorText: string
 }
 
-export type PokemonProcessingResponseType = {
+export type PokemonProcessingDataResponseType = {
   pokeId: number
   img: string
   typesJa: TypesJa[]

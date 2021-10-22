@@ -1,0 +1,23 @@
+// Getters
+export const GETTER_POKEMONS: string = 'pokemonZukan/GETTER_POKEMONS'
+export const GETTER_POKEMONS_BY_VERSION: string =
+  'pokemonZukan/GETTER_POKEMONS_BY_VERSION'
+export const GETTER_POKEMON_AT_ID: string = 'pokemonZukan/GETTER_POKEMON_AT_ID'
+export const GETTER_POKEMON_AT_POKEMON_NAME: string =
+  'pokemonZukan/GETTER_POKEMON_AT_POKEMON_NAME'
+
+// Mutations
+export const MUTATION_SET_POKEMONS: string =
+  'pokemonZukan/MUTATION_SET_POKEMONS'
+export const MUTATION_RESET_POKEMONBYVERSIONLIST: string =
+  'pokemonZukan/MUTATION_RESET_POKEMONBYVERSIONLIST'
+export const MUTATION_SET_POKEMONBYVERSIONLIST: string =
+  'pokemonZukan/MUTATION_SET_POKEMONBYVERSIONLIST'
+
+// Actions
+export const ACTION_SET_POKEMONS: string = 'pokemonZukan/ACTION_SET_POKEMONS'
+export const ACTION_GET_POKEMONS: string = 'pokemonZukan/ACTION_GET_POKEMONS'
+export const ACTION_GET_POKEMONBYVERSIONLIST: string =
+  'pokemonZukan/ACTION_GET_POKEMONBYVERSIONLIST'
+export const ACTION_RESET_POKEMONBYVERSIONLIST: string =
+  'pokemonZukan/ACTION_RESET_POKEMONBYVERSIONLIST'

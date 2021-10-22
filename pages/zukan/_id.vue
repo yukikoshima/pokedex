@@ -9,7 +9,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import PokemonCard from '~/components/Common/PokemonCard.vue'
-import * as zukanVersionType from '@/store/types/zukanVersionType'
+import * as pokemonZukanType from '@/store/types/pokemonZukanType'
 
 export default Vue.extend({
   components: {
@@ -18,7 +18,7 @@ export default Vue.extend({
   middleware: ['zukanVersion'],
   computed: {
     pokemons() {
-      return this.$store.getters[zukanVersionType.GETTER_POKEMONS]
+      return this.$store.getters[pokemonZukanType.GETTER_POKEMONS_BY_VERSION]
     },
   },
 })

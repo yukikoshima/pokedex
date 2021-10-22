@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
+import * as pokemonZukanType from '~/store/types/pokemonZukanType'
 
 export default Vue.extend({
   data() {
@@ -45,7 +45,7 @@ export default Vue.extend({
       let pokemon
       // 数字の場合
       if (this.$checkFormat(this.searchWord, 'number')) {
-        pokemon = this.$store.getters[getAllPokemonsType.GETTER_POKEMON_AT_ID](
+        pokemon = this.$store.getters[pokemonZukanType.GETTER_POKEMON_AT_ID](
           Number(this.searchWord)
         )
         if (pokemon) {
@@ -57,7 +57,7 @@ export default Vue.extend({
       } else {
         // 文字列の場合
         pokemon = this.$store.getters[
-          getAllPokemonsType.GETTER_POKEMON_AT_POKEMON_NAME
+          pokemonZukanType.GETTER_POKEMON_AT_POKEMON_NAME
         ](this.$hiraToKana(this.searchWord))
 
         if (pokemon.length) {
