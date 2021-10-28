@@ -25,11 +25,11 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '@/plugins/persistedstate', ssr: false },
+    { src: '@/plugins/axios', ssr: false},
     { src: '@/plugins/getPokemonZukan', ssr: false },
     '@/plugins/vuexRouterSync',
     '@/plugins/lazyload',
     '@/plugins/toTypeJa',
-    '@/plugins/fetchData',
     '@/plugins/toJaName',
     '@/plugins/checkFormat',
     '@/plugins/hiraToKana',
