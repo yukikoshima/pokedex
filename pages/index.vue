@@ -1,12 +1,14 @@
 <template>
-  <div></div>
-  <!-- generation/index.vueへリダイレクト -->
+  <Welcome />
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import Welcome from '@/components/Pages/Welcome.vue'
 
 export default Vue.extend({
-  middleware: ['start'],
+  components: {
+    Welcome,
+  },
 })
 </script>

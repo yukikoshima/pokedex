@@ -77,4 +77,12 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  // youtubeのapiを使用するため
+  publicRuntimeConfig: {
+    apiKey: process.env.YOUTUBE_API_KEY
+  },
+  privateRuntimeConfig: {
+    apiKey: process.env.NODE_ENV !== 'production' ? process.env.YOUTUBE_API_KEY : undefined
+  }
 }

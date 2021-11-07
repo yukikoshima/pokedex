@@ -1,10 +1,12 @@
 // eslint-disable-next-line import/named
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import * as pokemonZukanType from '~/store/types/pokemonZukanType'
+import * as errorType from '@/store/types/errorType'
 import {
   PokemonZukanAdapter,
   PokemonProcessingDataResponseType,
 } from '~/store/types/adapters/pokemonZukanAdapter'
+import { ErrorStatus } from '@/store/types/adapters/errorAdapter'
 
 const state = () => {
   return new PokemonZukanAdapter()
@@ -75,7 +77,11 @@ const actions = {
     commit(pokemonZukanType.MUTATION_RESET_POKEMONBYVERSIONLIST)
   },
 
-  async [pokemonZukanType.ACTION_GET_POKEMONS]({ commit }) {
+  async [pokemonZukanType.ACTION_GET_POKEMONS]({
+    dispatch,
+    commit,
+    rootGetters,
+  }) {
     const lastNo = PokemonZukanAdapter.lastNo
     let pokeNo = Number(sessionStorage.getItem('pokeNo'))
 
@@ -97,9 +103,9 @@ const actions = {
           // const spId = pokeSp.id
           // 英語で返ってくるので日本語に変換
           const name = this.$toJaName(pokeSp.names)
+
           const genera = this.$toJaName(pokeSp.genera)
           const flavorText = this.$toJaName(pokeSp.flavor_text_entries)
-
           const pokemon: PokemonProcessingDataResponseType = {
             pokeId,
             img,
@@ -109,13 +115,22 @@ const actions = {
             flavorText,
           }
           commit(pokemonZukanType.MUTATION_SET_POKEMONS, pokemon)
-
           sessionStorage.setItem('pokeNo', String((pokeNo += 1)))
           pokeNo = Number(sessionStorage.getItem('pokeNo'))
         })
         .catch((err) => {
-          console.log('ポケモン情報取得中にエラーが発生しました')
-          console.error(err)
+          console.log(
+            'pokemonZukanType.ACTION_GET_POKEMONS: ポケモン図鑑取得中にエラーが発生しました'
+          )
+          console.error(`${err.name}: ${err.message}`)
+          const error: ErrorStatus = {
+            statusCode: err.name,
+            message: err.message,
+          }
+          dispatch(errorType.ACTION_SET_ERROR, error)
+          // ループから抜け出すため
+          pokeNo = 900
+          this.app.context.error(rootGetters[errorType.GETTER_ERRORS])
         })
     }
   },

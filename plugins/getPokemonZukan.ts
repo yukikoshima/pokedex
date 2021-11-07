@@ -1,6 +1,6 @@
 import * as pokemonZukanType from '~/store/types/pokemonZukanType'
 
-const getPokemonZukan = (store) => {
+const getPokemonZukan = ({ store }) => {
   console.log('plugins/getPokemonZukan.ts: start')
 
   if (!sessionStorage.getItem('pokeNo')) {
@@ -12,6 +12,7 @@ const getPokemonZukan = (store) => {
   store.dispatch(pokemonZukanType.ACTION_GET_POKEMONS)
 }
 
-export default (context, inject) => {
-  inject('getPokemonZukan', getPokemonZukan)
-}
+// export default (context, inject) => {
+//   inject('getPokemonZukan', getPokemonZukan)
+// }
+export default getPokemonZukan
