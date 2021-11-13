@@ -103,7 +103,6 @@ const actions = {
           // const spId = pokeSp.id
           // 英語で返ってくるので日本語に変換
           const name = this.$toJaName(pokeSp.names)
-
           const genera = this.$toJaName(pokeSp.genera)
           const flavorText = this.$toJaName(pokeSp.flavor_text_entries)
           const pokemon: PokemonProcessingDataResponseType = {

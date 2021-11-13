@@ -2,14 +2,6 @@
   <v-main>
     <v-container app fluid>
       <main>
-        <img
-          src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7"
-          width="300"
-          height="300"
-          alt=""
-          class="lazyload"
-          data-src="@/assets/img/icon_pikachu.png"
-        />
         <div class="top text-center headline">
           <p
             class="
@@ -25,7 +17,7 @@
             ポケモンをみたり、ポケモンしりとりができるよ！
           </p>
         </div>
-        <Youtube />
+        <Youtube :youtube-data="youtubeData" />
       </main>
     </v-container>
   </v-main>
@@ -37,6 +29,12 @@ import Youtube from './Youtube.vue'
 
 export default Vue.extend({
   components: { Youtube },
+  props: {
+    youtubeData: {
+      type: Array,
+      default: () => [],
+    },
+  },
 })
 </script>
 
