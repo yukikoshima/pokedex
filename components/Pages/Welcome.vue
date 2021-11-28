@@ -17,7 +17,7 @@
             ポケモンをみたり、ポケモンしりとりができるよ！
           </p>
         </div>
-        <Youtube :youtube-data="youtubeData" />
+        <Youtube :youtube="youtube" />
       </main>
     </v-container>
   </v-main>
@@ -30,7 +30,7 @@ import Youtube from './Youtube.vue'
 export default Vue.extend({
   components: { Youtube },
   props: {
-    youtubeData: {
+    youtube: {
       type: Array,
       default: () => [],
     },

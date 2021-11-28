@@ -3,39 +3,38 @@
     <v-container>
       <v-list nav width="250px">
         <v-list-group
-          v-for="navList in navLists"
-          :key="navList.name"
+          v-for="routeList in routeLists"
+          :key="routeList.name"
           no-action
-          :append-icon="navList.lists ? undefined : ''"
-          value="true"
+          :append-icon="routeList.routes ? undefined : ''"
         >
           <template #activator>
-            <v-list-item v-if="navList.lists" class="mb-0">
+            <v-list-item v-if="routeList.routes" class="mb-0">
               <v-list-item-avatar>
-                <v-img :src="navList.avatar"></v-img>
+                <v-img :src="routeList.avatar"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title>{{ navList.name }}</v-list-item-title>
+                <v-list-item-title>{{ routeList.name }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item v-else :to="navList.link">
+            <v-list-item v-else :to="routeList.link">
               <v-list-item-avatar>
-                <v-img :src="navList.avatar"></v-img>
+                <v-img :src="routeList.avatar"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title>{{ navList.name }}</v-list-item-title>
+                <v-list-item-title>{{ routeList.name }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </template>
           <v-list-item
-            v-for="list in navList.lists"
-            :key="list.name"
-            :to="list.link"
+            v-for="route in routeList.routes"
+            :key="route.name"
+            :to="route.link"
             nuxt
             exact
           >
             <v-list-item-content>
-              <v-list-item-title>{{ list.name }}</v-list-item-title>
+              <v-list-item-title>{{ route.name }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -51,11 +50,11 @@ export default Vue.extend({
   data() {
     return {
       isDrawer: true,
-      navLists: [
+      routeLists: [
         {
           name: 'ポケモン図鑑',
           avatar: require('@/assets/img/icon_pokemonzukan.png'),
-          lists: [
+          routes: [
             {
               name: '全世代',
               link: '/zukan',
@@ -100,8 +99,8 @@ export default Vue.extend({
         },
         {
           name: 'しりとり',
-          avatar: require('@/assets/img/icon_pokemonzukan.png'),
-          link: '/zukan/test',
+          avatar: require('@/assets/img/icon_pikachu.png'),
+          link: '/shiritori',
         },
       ],
     }

@@ -4,7 +4,7 @@
       <img :src="pokemon.img" :alt="pokemon.name" />
       <v-container>
         <div class="text-center text-h5">
-          <p>{{ `No.${pokemon.pokeId}` }}</p>
+          <p>{{ `No.${pokemon.id}` }}</p>
           <p class="text-h5">{{ pokemon.name }}</p>
         </div>
       </v-container>
@@ -49,9 +49,9 @@ export default Vue.extend({
     }
   },
   methods: {
-    show(pokemon, isDialog) {
+    show(pokemon) {
       this.pokemon = pokemon
-      this.isDialog = isDialog
+      this.isDialog = true
     },
   },
 })

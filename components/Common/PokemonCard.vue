@@ -3,8 +3,8 @@
     <v-row dense>
       <!-- ポケモンカード -->
       <v-col
-        v-for="pokemon in pokemonsData"
-        :key="pokemon.pokeId"
+        v-for="pokemon in pokemonsCard"
+        :key="pokemon.id"
         cols="4"
         lg="2"
         md="2"
@@ -48,26 +48,24 @@ export default Vue.extend({
   },
   data() {
     return {
-      pokemonsData: [],
+      pokemonsCard: [],
       pageIndex: 0,
       perPage: 18,
-      items: [],
     }
   },
   methods: {
     showDialog(pokemon) {
-      this.$refs.showDialog.show(pokemon, true)
+      this.$refs.showDialog.show(pokemon)
     },
     infiniteHandler($state) {
       setTimeout(() => {
-        console.log('infiniteHandler')
-        this.pageIndex++
-        this.pokemonsData = this.pokemons.slice(
+        this.pageIndex += 1
+        this.pokemonsCard = this.pokemons.slice(
           0,
           this.pageIndex * this.perPage
         )
 
-        if (this.pokemonsData.length !== this.pokemons.length) {
+        if (this.pokemonsCard.length !== this.pokemons.length) {
           $state.loaded()
         } else {
           $state.complete()

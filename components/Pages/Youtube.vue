@@ -6,8 +6,8 @@
       <p>youtubeで評価が高い動画</p>
       <v-row dense>
         <v-col
-          v-for="(url, index) in thumbnailsUrls"
-          :key="index"
+          v-for="(url, i) in thumbnailsUrls"
+          :key="i"
           cols="12"
           lg="6"
           md="6"
@@ -16,11 +16,11 @@
         >
           <div class="youtube">
             <img
-              :id="`youtube_${index}`"
+              :id="`youtube_${i}`"
               :src="url"
               :alt="url.name"
               loading="lazy"
-              @click="onClickPlay(index)"
+              @click="youtubePlay(i)"
             />
           </div>
         </v-col>
@@ -34,29 +34,27 @@ import Vue from 'vue'
 
 export default Vue.extend({
   props: {
-    youtubeData: {
+    youtube: {
       type: Array,
       default: () => [],
     },
   },
   data() {
     return {
-      ytubeData: this.youtubeData,
+      ytube: this.youtube,
       thumbnailsUrls: [],
       movieUrls: [],
     }
   },
   created() {
-    this.thumbnailsUrls = this.ytubeData.map(
-      (item) => item.snippet.thumbnails.medium.url
-    )
-    this.movieUrls = this.ytubeData.map((item) => item.id.videoId)
+    this.thumbnailsUrls = this.ytube.map((v) => v.snippet.thumbnails.medium.url)
+    this.movieUrls = this.ytube.map((v) => v.id.videoId)
   },
   methods: {
-    onClickPlay(index) {
-      const ele = document.getElementById(`youtube_${index}`)
-      ele.outerHTML =
-        `<iframe src="https://www.youtube.com/embed/${this.movieUrls[index]}"` +
+    youtubePlay(i) {
+      let el = document.getElementById(`youtube_${i}`)
+      el.outerHTML =
+        `<iframe src="https://www.youtube.com/embed/${this.movieUrls[i]}"` +
         'title="YouTube video player" frameborder="0" allow="accelerometer;' +
         'autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"' +
         'allowfullscreen></iframe>'

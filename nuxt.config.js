@@ -30,9 +30,10 @@ export default {
     { src: '@/plugins/axios', ssr: false},
     { src: '@/plugins/getPokemonZukan', ssr: false },
     '@/plugins/toTypeJa',
-    '@/plugins/toJaName',
+    '@/plugins/toNameJa',
     '@/plugins/checkFormat',
     '@/plugins/hiraToKana',
+    '@/plugins/shiritori',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

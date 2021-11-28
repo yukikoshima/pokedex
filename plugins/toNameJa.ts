@@ -1,7 +1,7 @@
-const toJaName = (array) => {
-  const obj = array.find((ele) => {
-    if (ele.language.name === 'ja-Hrkt') {
-      return ele
+const toNameJa = (array) => {
+  const obj = array.find((v) => {
+    if (v.language.name === 'ja-Hrkt') {
+      return v
     }
     return null
   })
@@ -18,5 +18,5 @@ const toJaName = (array) => {
 }
 
 export default (context, inject) => {
-  inject('toJaName', toJaName)
+  inject('toNameJa', toNameJa)
 }

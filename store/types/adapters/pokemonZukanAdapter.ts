@@ -2,31 +2,22 @@
 export class PokemonZukanAdapter {
   static lastNo: number = 898
   constructor(
-    public allPokemonList: PokemonData[] = [],
-    public pokemonByVersionList: PokemonData[] = []
+    public pokemons: PokemonInfo[] = [],
+    public pokemonsByVersion: PokemonInfo[] = []
   ) {}
 }
 
-type TypesJa = {
+type TypeJa = {
   [key: number]: {
     name: string
     link: string
   }
 }
 
-type PokemonData = {
-  pokeId: number
+export type PokemonInfo = {
+  id: number
   img: string
-  typesJa: TypesJa[]
-  name: string
-  genera: string
-  flavorText: string
-}
-
-export type PokemonProcessingDataResponseType = {
-  pokeId: number
-  img: string
-  typesJa: TypesJa[]
+  typesJa: TypeJa[]
   name: string
   genera: string
   flavorText: string

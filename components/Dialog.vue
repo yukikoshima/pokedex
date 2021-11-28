@@ -18,7 +18,7 @@
             <!-- ポケモンカード -->
             <v-col
               v-for="pokemon in pokemons"
-              :key="pokemon.pokeId"
+              :key="pokemon.id"
               cols="4"
               lg="2"
               md="2"
@@ -39,13 +39,18 @@
         </v-container>
       </v-card>
     </v-dialog>
+    <ShowDialog ref="showDialog" />
   </v-row>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import ShowDialog from '~/components/Common/ShowDialog.vue'
 
 export default Vue.extend({
+  components: {
+    ShowDialog,
+  },
   data() {
     return {
       isDialog: false,
@@ -62,6 +67,9 @@ export default Vue.extend({
     },
     closeDialog() {
       this.isDialog = false
+    },
+    showDialog(pokemon) {
+      this.$refs.showDialog.show(pokemon)
     },
   },
 })

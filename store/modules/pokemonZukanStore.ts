@@ -4,7 +4,7 @@ import * as pokemonZukanType from '~/store/types/pokemonZukanType'
 import * as errorType from '@/store/types/errorType'
 import {
   PokemonZukanAdapter,
-  PokemonProcessingDataResponseType,
+  PokemonInfo,
 } from '~/store/types/adapters/pokemonZukanAdapter'
 import { ErrorStatus } from '@/store/types/adapters/errorAdapter'
 
@@ -12,71 +12,83 @@ const state = () => {
   return new PokemonZukanAdapter()
 }
 
-type pokemonZukanList = ReturnType<typeof state>
+type pokemonZukan = ReturnType<typeof state>
 
-const getters: GetterTree<pokemonZukanList, pokemonZukanList> = {
+const getters: GetterTree<pokemonZukan, pokemonZukan> = {
   /**
    * 全てのポケモン取得
    */
-  [pokemonZukanType.GETTER_POKEMONS](state: pokemonZukanList) {
-    return [...state.allPokemonList]
+  [pokemonZukanType.GETTER_POKEMONS](state: pokemonZukan) {
+    return state.pokemons.map((pokemon) => Object.assign({}, pokemon))
+    // return state.pokemons.map(pokemon => ({...pokemon}))
   },
   /**
    * バージョンごとのポケモン取得
    */
-  [pokemonZukanType.GETTER_POKEMONS_BY_VERSION](state: pokemonZukanList) {
-    return [...state.pokemonByVersionList]
+  [pokemonZukanType.GETTER_POKEMONS_BY_VERSION](state: pokemonZukan) {
+    return state.pokemonsByVersion.map((pokemon) => Object.assign({}, pokemon))
   },
   /**
    * 図鑑番号で取得
    */
-  [pokemonZukanType.GETTER_POKEMON_AT_ID]:
-    (state: pokemonZukanList) => (id: number) => {
-      return state.allPokemonList.find((pokemon) => pokemon.pokeId === id)
+  [pokemonZukanType.GETTER_POKEMON_BY_ID]:
+    (state: pokemonZukan) => (id: number) => {
+      return state.pokemons.find((pokemon) => pokemon.id === id)
     },
   /**
    * ポケモン名で取得
    */
-  [pokemonZukanType.GETTER_POKEMON_AT_POKEMON_NAME]:
-    (state: pokemonZukanList) => (name: string) => {
-      return state.allPokemonList.filter((pokemon) =>
-        pokemon.name.includes(name)
-      )
+  [pokemonZukanType.GETTER_POKEMONS_BY_INCLUDES]:
+    (state: pokemonZukan) => (name: string) => {
+      return state.pokemons.filter((pokemon) => pokemon.name.includes(name))
     },
+  /**
+   * 完全一致で検索
+   */
+  [pokemonZukanType.GETTER_POKEMON_BY_POKEMON_NAME]:
+    (state: pokemonZukan) => (name: string) => {
+      return state.pokemons.find((pokemon) => pokemon.name === name)
+    },
+  /**
+   * しりとりが成立しているポケモンかつ末尾が「ン」ではないポケモンを取得
+   */
+  [pokemonZukanType.GETTER_POKEMONS_BY_TEST]: (state: pokemonZukan) => (prev: string) => {
+    return state.pokemons.filter(pokemon => pokemon.name.startsWith(prev.slice(-1)) && !pokemon.name.endsWith('ン'))
+  }
 }
 
-const mutations: MutationTree<pokemonZukanList> = {
+const mutations: MutationTree<pokemonZukan> = {
   /**
    * 全てのポケモンをセット
    */
   [pokemonZukanType.MUTATION_SET_POKEMONS](
-    state: pokemonZukanList,
-    pokemon: PokemonProcessingDataResponseType
+    state: pokemonZukan,
+    pokemon: PokemonInfo
   ) {
-    state.allPokemonList.push(pokemon)
+    state.pokemons.push(pokemon)
   },
   /**
    * バージョンごとのポケモンをセット
    */
-  [pokemonZukanType.MUTATION_SET_POKEMONBYVERSIONLIST](
-    state: pokemonZukanList,
-    pokemon: PokemonProcessingDataResponseType
+  [pokemonZukanType.MUTATION_SET_POKEMONS_BY_VERSION](
+    state: pokemonZukan,
+    pokemon: PokemonInfo
   ) {
-    state.pokemonByVersionList.push(pokemon)
+    state.pokemonsByVersion.push(pokemon)
   },
-  [pokemonZukanType.MUTATION_RESET_POKEMONBYVERSIONLIST](
-    state: pokemonZukanList
-  ) {
-    // Object.assign(state.pokemonByVersionList, state.pokemonByVersionList = [])
-    state.pokemonByVersionList = []
+  [pokemonZukanType.MUTATION_CLEAR_POKEMONS_BY_VERSION](state: pokemonZukan) {
+    // Object.assign(state.pokemonsByVersion, state.pokemonsByVersion = [])
+    state.pokemonsByVersion = []
   },
 }
 
 const actions = {
-  [pokemonZukanType.ACTION_RESET_POKEMONBYVERSIONLIST]({ commit }) {
-    commit(pokemonZukanType.MUTATION_RESET_POKEMONBYVERSIONLIST)
+  [pokemonZukanType.ACTION_CLEAR_POKEMONS_BY_VERSION]({ commit }) {
+    commit(pokemonZukanType.MUTATION_CLEAR_POKEMONS_BY_VERSION)
   },
-
+  /**
+   * 全てのポケモンを取得
+   */
   async [pokemonZukanType.ACTION_GET_POKEMONS]({
     dispatch,
     commit,
@@ -92,7 +104,7 @@ const actions = {
       ])
         .then(([poke, pokeSp]) => {
           // id、画像、タイプを取得
-          const pokeId = poke.id
+          const id = poke.id
           const img = poke.sprites.other['official-artwork'].front_default
           const types = poke.types.map((ele) => {
             return ele.type.name
@@ -100,13 +112,12 @@ const actions = {
           // タイプが英語で返ってくるので日本語に変換
           const typesJa = this.$toTypeJa(types)
           // id、名前、種類、説明を取得
-          // const spId = pokeSp.id
           // 英語で返ってくるので日本語に変換
-          const name = this.$toJaName(pokeSp.names)
-          const genera = this.$toJaName(pokeSp.genera)
-          const flavorText = this.$toJaName(pokeSp.flavor_text_entries)
-          const pokemon: PokemonProcessingDataResponseType = {
-            pokeId,
+          const name = this.$toNameJa(pokeSp.names)
+          const genera = this.$toNameJa(pokeSp.genera)
+          const flavorText = this.$toNameJa(pokeSp.flavor_text_entries)
+          const pokemon: PokemonInfo = {
+            id,
             img,
             typesJa,
             name,
@@ -133,17 +144,19 @@ const actions = {
         })
     }
   },
-
-  async [pokemonZukanType.ACTION_GET_POKEMONBYVERSIONLIST]({ state, commit }) {
-    const pokemons = [...state.allPokemonList]
+  /**
+   * ポケモンをバージョンごとに取得
+   */
+  async [pokemonZukanType.ACTION_GET_POKEMONS_BY_VERSION]({ commit }) {
+    const pokemons = this.getters[pokemonZukanType.GETTER_POKEMONS]
     const endNo = Number(sessionStorage.getItem('endNo'))
     let startNo = Number(sessionStorage.getItem('startNo'))
-
+    let pokemon = {}
     while (startNo <= endNo) {
       if (!pokemons[startNo - 1]) return
 
-      let pokemon = pokemons[startNo - 1]
-      await commit(pokemonZukanType.MUTATION_SET_POKEMONBYVERSIONLIST, pokemon)
+      pokemon = pokemons[startNo - 1]
+      await commit(pokemonZukanType.MUTATION_SET_POKEMONS_BY_VERSION, pokemon)
 
       sessionStorage.setItem('startNo', String((startNo += 1)))
       startNo = Number(sessionStorage.getItem('startNo'))

@@ -1,5 +1,5 @@
 <template>
-  <Welcome :youtube-data="youtubeData" />
+  <Welcome :youtube="youtube" />
 </template>
 
 <script lang="ts">
@@ -16,7 +16,7 @@ export default Vue.extend({
     Welcome,
   },
   async asyncData({ $axios, store, error, $config: { apiKey } }) {
-    const items = await $axios
+    const youtube = await $axios
       .$get(`${apiUrl}${apiKey}`)
       .then((res) => res.items)
       .catch((e) => {
@@ -29,7 +29,7 @@ export default Vue.extend({
         error(store.getters[errorType.GETTER_ERRORS])
       })
 
-    return { youtubeData: items }
+    return { youtube }
   },
 })
 </script>

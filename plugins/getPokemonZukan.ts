@@ -12,7 +12,4 @@ const getPokemonZukan = ({ store }) => {
   store.dispatch(pokemonZukanType.ACTION_GET_POKEMONS)
 }
 
-// export default (context, inject) => {
-//   inject('getPokemonZukan', getPokemonZukan)
-// }
 export default getPokemonZukan

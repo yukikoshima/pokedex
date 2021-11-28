@@ -15,7 +15,7 @@ export default Vue.extend({
   components: {
     PokemonCard,
   },
-  middleware: ['zukanVersion'],
+  middleware: ['getPokemonsByVersion'],
   computed: {
     pokemons() {
       return this.$store.getters[pokemonZukanType.GETTER_POKEMONS_BY_VERSION]
