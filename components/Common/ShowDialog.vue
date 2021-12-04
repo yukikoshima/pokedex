@@ -1,10 +1,10 @@
 <template>
   <v-dialog v-model="isDialog" scrollable height="490px" max-width="490px">
     <v-card class="v-card-height">
-      <v-img :src="pokemon.img"></v-img>
+      <img :src="pokemon.img" :alt="pokemon.name" />
       <v-container>
         <div class="text-center text-h5">
-          <p>{{ `No.${pokemon.pokeId}` }}</p>
+          <p>{{ `No.${pokemon.id}` }}</p>
           <p class="text-h5">{{ pokemon.name }}</p>
         </div>
       </v-container>
@@ -23,6 +23,7 @@
               :src="require(`@/assets/img/type/${type.link}`)"
               max-width="40px"
               class="ma-auto"
+              :alt="pokemon.name"
             ></v-img>
             <span class="text-body-2">{{ type.name }}</span>
           </div>
@@ -48,28 +49,10 @@ export default Vue.extend({
     }
   },
   methods: {
-    show(pokemon, isDialog) {
+    show(pokemon) {
       this.pokemon = pokemon
-      this.isDialog = isDialog
+      this.isDialog = true
     },
   },
 })
 </script>
-
-<style scoped>
-.v-card-height {
-  height: 865px;
-  max-height: 925px;
-}
-.v-image {
-  z-index: 0;
-  color: rgba(0, 0, 0, 87);
-}
-.v-responsive {
-  position: relative;
-  overflow: hidden;
-  flex: 1 0 auto;
-  max-width: 100%;
-  display: flex;
-}
-</style>

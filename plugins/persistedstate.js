@@ -1,4 +1,4 @@
-import { Context, Plugin } from '@nuxt/types'
+// import { Context, Plugin } from '@nuxt/types'
 import createPersistedState from 'vuex-persistedstate'
 // import * as Cookies from 'js-cookie';
 

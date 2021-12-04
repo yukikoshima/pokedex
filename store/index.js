@@ -1,13 +1,15 @@
 import Vuex from 'vuex'
 
-import getAllPokemonsStore from './modules/getAllPokemonsStore'
-import zukanVersionStore from './modules/zukanVersionStore'
+import pokemonZukanStore from './modules/pokemonZukanStore'
+import shiritoriStore from './modules/shiritoriStore'
+import errorStore from './modules/errorStore'
 
 const createStore = () => {
   return new Vuex.Store({
     modules: {
-      getAllPokemonsStore,
-      zukanVersionStore,
+      pokemonZukanStore,
+      shiritoriStore,
+      errorStore
     },
   })
 }

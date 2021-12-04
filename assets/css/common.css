@@ -1,0 +1,17 @@
+.v-card-height {
+  height: 865px;
+  max-height: 925px;
+}
+
+.v-image {
+  z-index: 0;
+  color: rgba(0, 0, 0, 87);
+}
+
+.v-responsive {
+  position: relative;
+  overflow: hidden;
+  flex: 1 0 auto;
+  max-width: 100%;
+  display: flex;
+}

@@ -1,7 +1,6 @@
 <template>
   <v-text-field
     v-model="searchWord"
-    name="pokeSerch"
     label="ポケモン検索"
     placeholder="なまえやずかん番号でさがす"
     hide-details
@@ -11,15 +10,15 @@
     type="text"
     class="ml-16"
     append-outer-icon="mdi-magnify"
-    @click:append-outer="pokeSearch"
-    @keypress.enter="pokeSearch"
+    @click:append-outer="searchPoke"
+    @keypress.enter="searchPoke"
   >
   </v-text-field>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
+import * as pokemonZukanType from '~/store/types/pokemonZukanType'
 
 export default Vue.extend({
   data() {
@@ -30,41 +29,33 @@ export default Vue.extend({
     }
   },
   methods: {
-    pokeSearch() {
-      // 前回の検索が残らないように初期化
-      this.pokemons = []
-
+    searchPoke() {
       // 空文字、null、空白文字チェック
       if (!this.searchWord || !this.searchWord.match(/\S/g)) {
         this.errMsg = 'ずかん番号やなまえをいれてみてね。'
         this.$nuxt.$emit('showSnackbar', this.errMsg)
+
         return
       }
-
-      // 数字の時は必ずオブジェクト、文字列の場合はオブジェクトまたは配列
-      let pokemon
       // 数字の場合
       if (this.$checkFormat(this.searchWord, 'number')) {
-        pokemon = this.$store.getters[getAllPokemonsType.GETTER_POKEMON_AT_ID](
-          Number(this.searchWord)
-        )
+        let pokemon = this.$store.getters[
+          pokemonZukanType.GETTER_POKEMON_BY_ID
+        ](Number(this.searchWord))
+
         if (pokemon) {
-          this.pokemons.push(pokemon)
-          this.$nuxt.$emit('openDialog', this.pokemons)
+          this.$nuxt.$emit('openDialog', [pokemon])
 
           return
         }
       } else {
         // 文字列の場合
-        pokemon = this.$store.getters[
-          getAllPokemonsType.GETTER_POKEMON_AT_POKEMON_NAME
+        const pokemons = this.$store.getters[
+          pokemonZukanType.GETTER_POKEMONS_BY_INCLUDES
         ](this.$hiraToKana(this.searchWord))
 
-        if (pokemon.length) {
-          // ディープコピー
-          // this.pokemons = JSON.parse(JSON.stringify(pokemon))
-          this.pokemons = [...pokemon]
-          this.$nuxt.$emit('openDialog', this.pokemons)
+        if (pokemons.length) {
+          this.$nuxt.$emit('openDialog', pokemons)
 
           return
         }

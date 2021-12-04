@@ -8,5 +8,18 @@
       "@@/*": ["./*"]
     }
   },
-  "exclude": ["node_modules", ".nuxt", "dist"]
+  // "exclude": ["node_modules", ".nuxt", "dist"]
+  "include": [
+    "pages",
+    "store",
+    "layout",
+    "component"
+  ],
+  "exclude": [
+    "node_modules",
+    ".nuxt",
+    "dist",
+    "assets",
+    "functions"
+  ]
 }

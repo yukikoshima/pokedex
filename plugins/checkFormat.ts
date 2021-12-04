@@ -31,7 +31,7 @@ const checkFormat = (str: string, formatName: string): boolean => {
   }
 }
 
-export default (context, inject) => {
+export default (_, inject) => {
   inject('checkFormat', checkFormat)
 }
 

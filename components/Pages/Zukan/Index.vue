@@ -10,17 +10,14 @@
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import PokemonCard from '~/components/Common/PokemonCard.vue'
-import * as getAllPokemonsType from '@/store/types/getAllPokemonsType'
+import * as pokemonZukanType from '~/store/types/pokemonZukanType'
 
 export default Vue.extend({
   components: {
     PokemonCard,
   },
   computed: {
-    // pokemons() {
-    //   return this.$store.getters[getAllPokemonsType.GETTER_POKEMONS]
-    // },
-    ...mapGetters({ pokemons: getAllPokemonsType.GETTER_POKEMONS }),
+    ...mapGetters({ pokemons: pokemonZukanType.GETTER_POKEMONS }),
   },
 })
 </script>
