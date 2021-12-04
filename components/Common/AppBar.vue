@@ -17,11 +17,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import Search from '@/components/Search.vue'
 import ErrorSnackbar from '@/components/Common/ErrorSnackbar.vue'
+import Dialog from '@/components/Dialog.vue'
 
 export default Vue.extend({
   components: {
+    Search,
     ErrorSnackbar,
+    Dialog,
   },
   methods: {
     switchDrawer() {

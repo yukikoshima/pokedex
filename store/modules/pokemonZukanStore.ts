@@ -19,14 +19,13 @@ const getters: GetterTree<pokemonZukan, pokemonZukan> = {
    * 全てのポケモン取得
    */
   [pokemonZukanType.GETTER_POKEMONS](state: pokemonZukan) {
-    return state.pokemons.map((pokemon) => Object.assign({}, pokemon))
-    // return state.pokemons.map(pokemon => ({...pokemon}))
+    return state.pokemons.map((pokemon) => ({ ...pokemon }))
   },
   /**
    * バージョンごとのポケモン取得
    */
   [pokemonZukanType.GETTER_POKEMONS_BY_VERSION](state: pokemonZukan) {
-    return state.pokemonsByVersion.map((pokemon) => Object.assign({}, pokemon))
+    return state.pokemonsByVersion.map((pokemon) => ({ ...pokemon }))
   },
   /**
    * 図鑑番号で取得
@@ -50,11 +49,11 @@ const getters: GetterTree<pokemonZukan, pokemonZukan> = {
       return state.pokemons.find((pokemon) => pokemon.name === name)
     },
   /**
-   * しりとりが成立しているポケモンかつ末尾が「ン」ではないポケモンを取得
+   * 「ン」で終わらないポケモンを取得
    */
-  [pokemonZukanType.GETTER_POKEMONS_BY_TEST]: (state: pokemonZukan) => (prev: string) => {
-    return state.pokemons.filter(pokemon => pokemon.name.startsWith(prev.slice(-1)) && !pokemon.name.endsWith('ン'))
-  }
+  [pokemonZukanType.GETTER_POKEMONS_END_N_NOT]: (state: pokemonZukan) => () => {
+    return state.pokemons.filter((pokemon) => !pokemon.name.endsWith('ン'))
+  },
 }
 
 const mutations: MutationTree<pokemonZukan> = {
@@ -77,12 +76,11 @@ const mutations: MutationTree<pokemonZukan> = {
     state.pokemonsByVersion.push(pokemon)
   },
   [pokemonZukanType.MUTATION_CLEAR_POKEMONS_BY_VERSION](state: pokemonZukan) {
-    // Object.assign(state.pokemonsByVersion, state.pokemonsByVersion = [])
     state.pokemonsByVersion = []
   },
 }
 
-const actions = {
+const actions: ActionTree<pokemonZukan, pokemonZukan> = {
   [pokemonZukanType.ACTION_CLEAR_POKEMONS_BY_VERSION]({ commit }) {
     commit(pokemonZukanType.MUTATION_CLEAR_POKEMONS_BY_VERSION)
   },
@@ -94,8 +92,8 @@ const actions = {
     commit,
     rootGetters,
   }) {
-    const lastNo = PokemonZukanAdapter.lastNo
-    let pokeNo = Number(sessionStorage.getItem('pokeNo'))
+    const lastNo: number = PokemonZukanAdapter.lastNo
+    let pokeNo: number = Number(sessionStorage.getItem('pokeNo'))
 
     while (pokeNo <= lastNo) {
       await Promise.all([
@@ -106,8 +104,8 @@ const actions = {
           // id、画像、タイプを取得
           const id = poke.id
           const img = poke.sprites.other['official-artwork'].front_default
-          const types = poke.types.map((ele) => {
-            return ele.type.name
+          const types = poke.types.map((v) => {
+            return v.type.name
           })
           // タイプが英語で返ってくるので日本語に変換
           const typesJa = this.$toTypeJa(types)
@@ -129,7 +127,7 @@ const actions = {
           pokeNo = Number(sessionStorage.getItem('pokeNo'))
         })
         .catch((err) => {
-          console.log(
+          console.error(
             'pokemonZukanType.ACTION_GET_POKEMONS: ポケモン図鑑取得中にエラーが発生しました'
           )
           console.error(`${err.name}: ${err.message}`)

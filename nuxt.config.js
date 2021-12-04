@@ -20,14 +20,18 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    '@/assets/css/common.css',
-  ],
+  css: ['@/assets/css/common.css'],
+
+  webfontloader: {
+    google: {
+      families: ['Yomogi'],
+    },
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '@/plugins/persistedstate', ssr: false },
-    { src: '@/plugins/axios', ssr: false},
+    { src: '@/plugins/axios', ssr: false },
     { src: '@/plugins/getPokemonZukan', ssr: false },
     '@/plugins/toTypeJa',
     '@/plugins/toNameJa',
@@ -52,6 +56,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    'nuxt-webfontloader',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -59,7 +64,8 @@ export default {
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ['~/assets/css/variables.scss'],
+    treeShake: true,
     theme: {
       dark: false,
       themes: {
@@ -81,9 +87,12 @@ export default {
 
   // youtubeのapiを使用するため
   publicRuntimeConfig: {
-    apiKey: process.env.YOUTUBE_API_KEY
+    apiKey: process.env.YOUTUBE_API_KEY,
   },
   privateRuntimeConfig: {
-    apiKey: process.env.NODE_ENV !== 'production' ? process.env.YOUTUBE_API_KEY : undefined
-  }
+    apiKey:
+      process.env.NODE_ENV !== 'production'
+        ? process.env.YOUTUBE_API_KEY
+        : undefined,
+  },
 }

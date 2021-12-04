@@ -1,5 +1,4 @@
 <template>
-  <!-- <div class="text-center ma-2"> -->
   <v-snackbar
     v-model="isSnackbar"
     :timeout="timeout"
@@ -15,7 +14,6 @@
       </v-btn>
     </template>
   </v-snackbar>
-  <!-- </div> -->
 </template>
 
 <script lang="ts">
@@ -34,8 +32,8 @@ export default Vue.extend({
   },
   methods: {
     showSnackbar(msg) {
-      this.isSnackbar = true
       this.msg = msg
+      this.isSnackbar = true
     },
     hideSnackbar() {
       this.isSnackbar = false

@@ -1,13 +1,14 @@
 import toTypeJapanese from '@/assets/json/toTypeJa.json'
+import { TypeJa } from '~/store/types/adapters/pokemonZukanAdapter'
 
-const toTypeJa = (types) => {
-  const typesJa = []
-  types.forEach((type, i) => {
-    typesJa[i] = toTypeJapanese[type]
+export const toTypeJa = (types: string[]): TypeJa[] => {
+  const typesJa: TypeJa[] = []
+  types.forEach((type) => {
+    typesJa.push(toTypeJapanese[type])
   })
   return typesJa
 }
 
-export default (context, inject) => {
+export default (_, inject) => {
   inject('toTypeJa', toTypeJa)
 }

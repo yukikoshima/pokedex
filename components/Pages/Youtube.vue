@@ -3,7 +3,7 @@
 <template>
   <div class="text-center">
     <div class="mt-10">
-      <p>youtubeで評価が高い動画</p>
+      <p class="text-md-h5">youtubeで評価が高い動画</p>
       <v-row dense>
         <v-col
           v-for="(url, i) in thumbnailsUrls"

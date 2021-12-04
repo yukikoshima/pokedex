@@ -62,8 +62,8 @@ export default Vue.extend({
   },
   methods: {
     openDialog(pokemons) {
-      this.isDialog = true
       this.pokemons = pokemons
+      this.isDialog = true
     },
     closeDialog() {
       this.isDialog = false

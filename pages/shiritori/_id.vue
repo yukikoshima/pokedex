@@ -1,8 +1,8 @@
 <template>
   <v-main>
     <v-container app fluid>
-      <header id="header" class="text-center">
-        <h1 class="poke_font">ポケモンしりとり</h1>
+      <header class="text-center">
+        <h1>ポケモンしりとり</h1>
       </header>
       <main class="pt-10">
         <v-row justify="center">
@@ -37,7 +37,9 @@
         <v-row justify="center">
           <v-col cols="12" lg="6">
             <table width="100%">
-              <tr v-for="(name, i) in savePokemons.slice().reverse()" :key="i">
+              <!-- <tr v-for="(name, i) in savePokemons.slice().reverse()" :key="i"> -->
+              <tr v-for="(name, i) in reverseSavePokemons" :key="i">
+                <td>{{ reverseSavePokemons.length - i }}</td>
                 <td>{{ i % 2 == 0 ? 'CPU' : 'あなた' }}</td>
                 <td>{{ name }}</td>
               </tr>
@@ -60,7 +62,7 @@ export default Vue.extend({
   components: { ErrorSnackbar },
   data() {
     return {
-      id: 0, // cpu検索用
+      id: 0,
       searchWord: '',
       prevPokemon: '',
       savePokemons: [], // しりとりで出たポケモンを保存
@@ -68,52 +70,50 @@ export default Vue.extend({
       myTurnTimes: 0, // 自分のターンの回数
       enemyTurnTimes: 0, // 敵のターンの回数
       enemyTurnMax: 0, // 敵の強さによってターンの上限を決める
-      errMsg: '',
+      errMsg: '', // エラーメッセージ
     }
   },
   computed: {
     ...mapGetters({
+      getPokemonsEndNNot: pokemonZukanType.GETTER_POKEMONS_END_N_NOT,
       getPokemonById: pokemonZukanType.GETTER_POKEMON_BY_ID,
       getPokemonByName: pokemonZukanType.GETTER_POKEMON_BY_POKEMON_NAME,
-      getPokemonsByTest: pokemonZukanType.GETTER_POKEMONS_BY_TEST,
     }),
+    reverseSavePokemons() {
+      return this.savePokemons.slice().reverse()
+    },
   },
   created() {
     this.enemyLavel = this.$route.params.id
     if (this.enemyLavel === 'veryEasy') {
-      this.enemyTurnMax = 10
+      this.enemyTurnMax = 20
     } else if (this.enemyLavel === 'easy') {
-      this.enemyTurnMax = 40
+      this.enemyTurnMax = 60
     } else if (this.enemyLavel === 'normal') {
-      this.enemyTurnMax = 90
+      this.enemyTurnMax = 151
+    } else if (this.enemyLavel === 'hard') {
+      this.enemyTurnMax = 350
     } else if (this.enemyLavel === 'veryHard') {
-      this.enemyTurnMax = 200
+      this.enemyTurnMax = 500
     }
   },
   mounted() {
     setTimeout(() => {
-      // CPUの1ターン目のみ処理
       this.turnFirstEnemy()
     }, 0)
   },
   methods: {
-    /**
-     * ポケモン番号1〜898をランダムで取得
-     */
-    getId() {
-      return Math.floor(Math.random() * 898) + 1
+    getId(n: number) {
+      return Math.floor(Math.random() * n)
     },
+    /**
+     * CPU: 初手
+     */
     turnFirstEnemy() {
-      while (true) {
-        this.id = this.getId()
-        let pokemon = this.getPokemonById(this.id)
-        if (pokemon.name.endsWith('ン')) continue // 末尾が「ン」の場合は再取得
-
-        this.savePokemons.push(pokemon.name)
-        this.prevPokemon = pokemon.name
-
-        break
-      }
+      this.id = this.getId(this.getPokemonsEndNNot().length)
+      const pokemon = this.getPokemonsEndNNot()[this.id]
+      this.savePokemons.push(pokemon.name)
+      this.prevPokemon = pokemon.name
       this.enemyTurnTimes += 1
     },
     /**
@@ -121,38 +121,24 @@ export default Vue.extend({
      * ランダムでポケモンを取得する
      */
     enemyTurn() {
-      // this.prevPokemon = this.$processingIfNeeded(this.prevPokemon) // 末尾が「長音」や「すてがな」なら加工する
-      // let pokemons = this.getPokemonsByTest(this.prevPokemon)
-
-      // if (pokemons.length) {
-      //   let pokemon = pokemons[Math.floor(Math.random() * pokemons.length)]
-      // }
-      // this.$store.commit(
-      //   shiritoriType.MUTATION_SET_TURN_TIMES,
-      //   this.myTurnTimes + this.enemyTurnTimes
-      // )
-      // this.$store.commit(
-      //   shiritoriType.MUTATION_SET_MY_TURN_TIMES,
-      //   this.myTurnTimes
-      // )
-      // this.$router.push('/shiritori/win')
-
       this.prevPokemon = this.$processingIfNeeded(this.prevPokemon) // 末尾が「長音」や「すてがな」なら加工する
-      let pokemon
-      while (true) {
-        this.id = this.getId()
-        pokemon = this.getPokemonById(this.id)
-
-        if (this.savePokemons.includes(pokemon.name)) continue // すでに出したポケモンの場合、再取得
-        if (pokemon.name.endsWith('ン')) continue // 末尾が「ン」か
-        if (!pokemon.name.startsWith(this.prevPokemon.slice(-1))) continue // しりとりが成立してない場合、再取得
-
+      const pokemons = this.getPokemonsEndNNot().filter(
+        (pokemon) =>
+          !this.savePokemons.includes(pokemon.name) &&
+          pokemon.name.startsWith(this.prevPokemon.slice(-1))
+      )
+      // ポケモンが取得できた時の処理
+      if (pokemons.length) {
+        this.id = this.getId(pokemons.length)
+        const pokemon = pokemons[this.id]
         this.savePokemons.push(pokemon.name)
         this.prevPokemon = pokemon.name
+        this.enemyTurnTimes += 1
 
-        break
+        return
       }
-      this.enemyTurnTimes += 1
+      this.registerTurnTimes()
+      this.$router.push('/shiritori/win')
     },
     myTurn() {
       // 空文字、null、空白文字の場合はエラー
@@ -161,15 +147,10 @@ export default Vue.extend({
         return
       }
 
-      let pokemon = this.getPokemonByName(this.$hiraToKana(this.searchWord))
+      const pokemon = this.getPokemonByName(this.$hiraToKana(this.searchWord))
       // 入力したポケモンが存在しない場合
       if (!pokemon) {
         this.showError(`「${this.searchWord}」は存在しないポケモンだよ！`)
-        return
-      }
-      // 末尾に「ン」がついてるか
-      if (pokemon.name.endsWith('ン')) {
-        this.$router.push('/shiritori/hantei')
         return
       }
       // 末尾が「長音」や「すてがな」、特殊なポケモンなら加工する 例: ニドラン♂
@@ -177,6 +158,11 @@ export default Vue.extend({
       // しりとりが成立してない場合、再取得
       if (!pokemon.name.startsWith(this.prevPokemon.slice(-1))) {
         this.showError('しりとりが成立してないよ！')
+        return
+      }
+      // 末尾に「ン」がついてるか
+      if (pokemon.name.endsWith('ン')) {
+        this.$router.push('/shiritori/lose')
         return
       }
       // すでに言ったポケモン
@@ -192,25 +178,16 @@ export default Vue.extend({
 
       if (this.enemyTurnTimes < this.enemyTurnMax) {
         this.enemyTurn()
-      } else {
-        this.$store.commit(
-          shiritoriType.MUTATION_SET_TURN_TIMES,
-          this.myTurnTimes + this.enemyTurnTimes
-        )
-        this.$store.commit(
-          shiritoriType.MUTATION_SET_MY_TURN_TIMES,
-          this.myTurnTimes
-        )
-        this.$router.push('/shiritori/win')
+
+        return
       }
+      this.registerTurnTimes()
+      this.$router.push('/shiritori/win')
     },
-    reStart() {
-      this.savePokemons = []
-      this.myTurnTimes = 0
-      this.enemyTurnTimes = 0
-      this.turnFirstEnemy()
-    },
-    giveUp() {
+    /**
+     * ターンの回数を保存
+     */
+    registerTurnTimes() {
       this.$store.commit(
         shiritoriType.MUTATION_SET_TURN_TIMES,
         this.myTurnTimes + this.enemyTurnTimes
@@ -219,6 +196,15 @@ export default Vue.extend({
         shiritoriType.MUTATION_SET_MY_TURN_TIMES,
         this.myTurnTimes
       )
+    },
+    reStart() {
+      this.savePokemons = []
+      this.myTurnTimes = 0
+      this.enemyTurnTimes = 0
+      this.turnFirstEnemy()
+    },
+    giveUp() {
+      this.registerTurnTimes()
       this.$router.push('/shiritori/lose')
     },
     showError(errMsg: string) {
@@ -231,15 +217,6 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-@font-face {
-  font-family: 'pokemon-font';
-  src: url('@/assets/fonts/pokemon-font.woff2') format('woff2');
-  src: url('@/assets/fonts/pokemon-font.ttf') format('truetype');
-}
-.poke_font {
-  font-family: 'pokemon-font' !important;
-}
-
 table {
   border-collapse: collapse;
 }

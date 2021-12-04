@@ -1,4 +1,4 @@
-const suteganaMap = [
+const suteganaMap: string[] = [
   'ァ',
   'ィ',
   'ゥ',
@@ -30,7 +30,7 @@ const suteganaMap = [
   'ヮ',
 ]
 
-const kanaMap = [
+const kanaMap: string[] = [
   'ア',
   'イ',
   'ウ',
@@ -72,7 +72,7 @@ const getSuteganaMapIndex = (name: string): number => {
 }
 
 const processingIfNeeded = (pokeName: string): string => {
-  let processingName = ''
+  let processingName: string = ''
   // 末尾が長音の場合
   if (pokeName.endsWith('ー')) {
     processingName = pokeName.slice(0, -1)

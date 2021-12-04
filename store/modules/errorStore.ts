@@ -7,23 +7,23 @@ const state = () => {
   return new ErrorAdapter()
 }
 
-type StateType = ReturnType<typeof state>
+type errorState = ReturnType<typeof state>
 
-const getters: GetterTree<StateType, StateType> = {
-  [types.GETTER_ERRORS](state: StateType) {
+const getters: GetterTree<errorState, errorState> = {
+  [types.GETTER_ERRORS](state: errorState) {
     return { ...state.errorStatus }
   },
 }
 
-const mutations: MutationTree<StateType> = {
-  [types.MUTATION_SET_ERROR](state: StateType, payload: ErrorStatus) {
-    state.errorStatus = payload
+const mutations: MutationTree<errorState> = {
+  [types.MUTATION_SET_ERROR](state: errorState, errorStatus: ErrorStatus) {
+    state.errorStatus = errorStatus
   },
 }
 
-const actions: ActionTree<StateType, StateType> = {
-  [types.ACTION_SET_ERROR](context, payload: ErrorStatus) {
-    context.commit(types.MUTATION_SET_ERROR, payload)
+const actions: ActionTree<errorState, errorState> = {
+  [types.ACTION_SET_ERROR](context, errorStatus: ErrorStatus) {
+    context.commit(types.MUTATION_SET_ERROR, errorStatus)
   },
 }
 

@@ -7,8 +7,8 @@ export const GETTER_POKEMONS_BY_INCLUDES: string =
   'pokemonZukan/GETTER_POKEMONS_BY_INCLUDES'
 export const GETTER_POKEMON_BY_POKEMON_NAME: string =
   'pokemonZukan/GETTER_POKEMON_BY_POKEMON_NAME'
-  export const GETTER_POKEMONS_BY_TEST: string =
-  'pokemonZukan/GETTER_POKEMONS_BY_TEST'
+export const GETTER_POKEMONS_END_N_NOT: string =
+  'pokemonZukan/GETTER_POKEMONS_END_N_NOT'
 
 // Mutations
 export const MUTATION_SET_POKEMONS: string =
