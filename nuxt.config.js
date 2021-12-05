@@ -85,6 +85,11 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 
+  // Netlifyで環境変数を使えるようにするため
+  env: {
+    apiKey: process.env.YOUTUBE_API_KEY,
+  },
+
   // youtubeのapiを使用するため
   publicRuntimeConfig: {
     apiKey: process.env.YOUTUBE_API_KEY,
