@@ -8,7 +8,7 @@
     clearable
     dense
     type="text"
-    class="ml-16"
+    class="ml-md-12"
     append-outer-icon="mdi-magnify"
     @click:append-outer="searchPoke"
     @keypress.enter="searchPoke"
