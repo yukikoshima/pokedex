@@ -167,6 +167,12 @@ export default Vue.extend({
       }
     },
   },
+  created() {
+    // mobileの時は初期表示しない
+    if (this.$vuetify.breakpoint.width < 600) {
+      this.isDrawer = false
+    }
+  },
   mounted() {
     this.$nuxt.$on('switchDrawer', this.switchDrawer)
   },
