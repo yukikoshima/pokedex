@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" md="12" sm="6">
+    <v-col cols="12" md="12" sm="3">
       <v-text-field
         v-model="searchWord"
         label="ポケモン検索"
