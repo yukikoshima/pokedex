@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="isDrawer" app clipped>
+  <v-navigation-drawer v-model="isDrawer" app clipped bottom>
     <v-container>
       <v-list nav width="250px">
         <v-list-group
