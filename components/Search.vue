@@ -9,6 +9,7 @@
     dense
     type="text"
     class="ml-md-12"
+    :width="width"
     append-outer-icon="mdi-magnify"
     @click:append-outer="searchPoke"
     @keypress.enter="searchPoke"
@@ -27,6 +28,14 @@ export default Vue.extend({
       pokemons: [],
       errMsg: '',
     }
+  },
+  computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
+    width() {
+      if (this.$vuetify.breakpoint.width <= 414) {
+        return 232
+      }
+    },
   },
   methods: {
     searchPoke() {
