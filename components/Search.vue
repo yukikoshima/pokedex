@@ -1,4 +1,6 @@
 <template>
+  <!-- append-outer-icon="mdi-magnify"
+    @click:append-outer="searchPoke" -->
   <v-text-field
     v-model="searchWord"
     label="ポケモン検索"
@@ -9,9 +11,6 @@
     dense
     type="text"
     class="ml-md-12"
-    :width="width"
-    append-outer-icon="mdi-magnify"
-    @click:append-outer="searchPoke"
     @keypress.enter="searchPoke"
   >
   </v-text-field>
@@ -28,14 +27,6 @@ export default Vue.extend({
       pokemons: [],
       errMsg: '',
     }
-  },
-  computed: {
-    // eslint-disable-next-line vue/return-in-computed-property
-    width() {
-      if (this.$vuetify.breakpoint.width <= 414) {
-        return 232
-      }
-    },
   },
   methods: {
     searchPoke() {
