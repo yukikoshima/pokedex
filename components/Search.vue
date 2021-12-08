@@ -1,23 +1,19 @@
 <template>
-  <v-row>
-    <v-col cols="12" md="12" sm="3">
-      <v-text-field
-        v-model="searchWord"
-        label="ポケモン検索"
-        placeholder="なまえやずかん番号でさがす"
-        hide-details
-        outlined
-        clearable
-        dense
-        type="text"
-        class="ml-md-12"
-        append-outer-icon="mdi-magnify"
-        @click:append-outer="searchPoke"
-        @keypress.enter="searchPoke"
-      >
-      </v-text-field>
-    </v-col>
-  </v-row>
+  <v-text-field
+    v-model="searchWord"
+    label="ポケモン検索"
+    placeholder="なまえやずかん番号でさがす"
+    hide-details
+    outlined
+    clearable
+    dense
+    type="text"
+    class="ml-md-12 mr-sm-0 mr-10"
+    append-outer-icon="mdi-magnify"
+    @click:append-outer="searchPoke"
+    @keypress.enter="searchPoke"
+  >
+  </v-text-field>
 </template>
 
 <script lang="ts">
