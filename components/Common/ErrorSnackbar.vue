@@ -1,16 +1,18 @@
 <template>
+  <!-- min-width: iPhone5,se用に設定 -->
   <v-snackbar
     v-model="isSnackbar"
     :timeout="timeout"
     absolute
-    centered
-    right
+    :right="!isMobile"
+    :centered="isMobile"
+    min-width="304"
     color="error"
   >
     {{ msg }}
     <template #action="{ attrs }">
       <v-btn color="white" text v-bind="attrs" @click="hideSnackbar">
-        閉じる
+        ✖️
       </v-btn>
     </template>
   </v-snackbar>
@@ -23,9 +25,18 @@ export default Vue.extend({
   data() {
     return {
       msg: '',
-      timeout: 3000,
+      timeout: 1500,
       isSnackbar: false,
     }
+  },
+  computed: {
+    isMobile() {
+      if (this.$vuetify.breakpoint.width <= 414) {
+        return true
+      }
+
+      return false
+    },
   },
   mounted() {
     this.$nuxt.$on('showSnackbar', this.showSnackbar)
