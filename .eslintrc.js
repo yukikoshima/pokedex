@@ -21,7 +21,7 @@ module.exports = {
     'vue/no-unused-components': 'off', // 使用していないコンポーネント
     'prefer-const': 'off', // 強制const変数
     'comma-dangle': 'off', // 最後のカンマあり
-    'camelcase': 'off',
+    'vue/multi-word-component-names': 'off',
     // '@typescript-eslint/naming-convention': 'warn',
   },
 }
