@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer v-model="isDrawer" app clipped bottom>
     <v-container>
-      <v-list nav width="250px">
+      <v-list nav>
         <v-list-group
           v-for="routeList in routeLists"
           :key="routeList.name"

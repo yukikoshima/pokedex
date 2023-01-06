@@ -1,10 +1,10 @@
-import toTypeJapanese from '@/assets/json/toTypeJa.json'
-import { TypeJa } from '~/store/types/adapters/pokemonZukanAdapter'
+import pokemonType from '@/assets/json/pokemonType.json'
+import { Type } from '~/store/types/adapters/pokemonZukanAdapter'
 
-export const toTypeJa = (types: string[]): TypeJa[] => {
-  const typesJa: TypeJa[] = []
+export const toTypeJa = (types: string[]): Type[] => {
+  const typesJa: Type[] = []
   types.forEach((type) => {
-    typesJa.push(toTypeJapanese[type])
+    typesJa.push(pokemonType[type])
   })
   return typesJa
 }

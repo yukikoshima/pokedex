@@ -7,7 +7,7 @@ export class PokemonZukanAdapter {
   ) {}
 }
 
-export type TypeJa = {
+export type Type = {
   [key: number]: {
     name: string
     link: string
@@ -17,7 +17,7 @@ export type TypeJa = {
 export type PokemonInfo = {
   id: number
   img: string
-  typesJa: TypeJa[]
+  typesJa: Type[]
   name: string
   genera: string
   flavorText: string
